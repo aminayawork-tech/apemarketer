@@ -87,6 +87,55 @@ body {
   margin: 1.5rem 0;
 }
 
+/* ── Stories reading view ── */
+.story-content h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1A2710;
+  margin-top: 2.5rem;
+  margin-bottom: 0.35rem;
+  border-bottom: none;
+  letter-spacing: -0.01em;
+}
+.story-content h2:first-child {
+  margin-top: 0;
+}
+.story-content p {
+  margin-bottom: 0.85rem;
+  line-height: 1.8;
+  color: #2A3D1A;
+  font-size: 0.9625rem;
+}
+.story-content ul li::marker { color: #3D7018; }
+.story-content strong { color: #B8680A; font-weight: 700; }
+.story-content em { color: #2D5016; font-style: italic; }
+.story-content hr {
+  border: none;
+  border-top: 2px solid #E4EFD8;
+  margin: 2.5rem 0;
+}
+.story-content blockquote {
+  border-left: 4px solid #B8680A;
+  background: #FEFAF4;
+  border-radius: 0 12px 12px 0;
+  padding: 0.875rem 1.25rem;
+  margin: 1.25rem 0 0;
+  color: #3D2E0A;
+  font-style: normal;
+}
+.story-content blockquote strong {
+  color: #B8680A;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.story-content blockquote p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #3D2E0A;
+}
+
 /* ── Chat bubble markdown (smaller, tighter) ── */
 .chat-markdown h2 {
   font-size: 0.9rem;

@@ -6,6 +6,7 @@ import ContextForm from "@/components/ContextForm";
 import AnalysisResult from "@/components/AnalysisResult";
 import Chat from "@/components/Chat";
 import SavedAnalyses, { SavedAnalysis } from "@/components/SavedAnalyses";
+import Stories from "@/components/Stories";
 
 interface ContextData {
   businessType: string;
@@ -24,7 +25,7 @@ const defaultContext: ContextData = {
 };
 
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState<"analyze" | "saved">("analyze");
+  const [activeTab, setActiveTab] = useState<"analyze" | "saved" | "stories">("analyze");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [context, setContext] = useState<ContextData>(defaultContext);
   const [analysisContent, setAnalysisContent] = useState("");
@@ -150,29 +151,30 @@ export default function HomePage() {
 
         {/* Tabs */}
         <div className="flex gap-1 p-1 bg-[#E4EFD8] rounded-xl mb-6">
-          <button
-            onClick={() => setActiveTab("analyze")}
-            className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-150 ${
-              activeTab === "analyze" ? "bg-white text-[#1A2710] shadow-sm" : "text-[#4D6B38] hover:text-[#1A2710]"
-            }`}
-          >
-            Analyze
-          </button>
-          <button
-            onClick={() => setActiveTab("saved")}
-            className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-150 flex items-center justify-center gap-2 ${
-              activeTab === "saved" ? "bg-white text-[#1A2710] shadow-sm" : "text-[#4D6B38] hover:text-[#1A2710]"
-            }`}
-          >
-            Saved
-            {savedAnalyses.length > 0 && (
-              <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${
-                activeTab === "saved" ? "bg-[#E4EFD8] text-[#2D5016]" : "bg-[#C5DBAA] text-[#2D5016]"
-              }`}>
-                {savedAnalyses.length}
-              </span>
-            )}
-          </button>
+          {(["analyze", "saved", "stories"] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`flex-1 py-2.5 px-2 rounded-lg text-sm font-semibold transition-all duration-150 flex items-center justify-center gap-1.5 ${
+                activeTab === tab ? "bg-white text-[#1A2710] shadow-sm" : "text-[#4D6B38] hover:text-[#1A2710]"
+              }`}
+            >
+              {tab === "analyze" && "Analyze"}
+              {tab === "stories" && "Stories"}
+              {tab === "saved" && (
+                <>
+                  Saved
+                  {savedAnalyses.length > 0 && (
+                    <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${
+                      activeTab === "saved" ? "bg-[#E4EFD8] text-[#2D5016]" : "bg-[#C5DBAA] text-[#2D5016]"
+                    }`}>
+                      {savedAnalyses.length}
+                    </span>
+                  )}
+                </>
+              )}
+            </button>
+          ))}
         </div>
 
         {activeTab === "analyze" ? (
@@ -270,12 +272,14 @@ export default function HomePage() {
               </div>
             )}
           </>
-        ) : (
+        ) : activeTab === "saved" ? (
           <SavedAnalyses
             analyses={savedAnalyses}
             onDelete={handleDeleteSaved}
             onEdit={handleEditSaved}
           />
+        ) : (
+          <Stories />
         )}
 
         <footer className="mt-12 text-center text-[#8AAD6A] text-xs">
