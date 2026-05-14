@@ -135,11 +135,12 @@ export async function POST(request: NextRequest) {
     });
 
     // Create streaming response
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const stream = client.messages.stream({
       model: "claude-opus-4-7",
       max_tokens: 4096,
-      thinking: { type: "adaptive" },
-      output_config: { effort: "high" },
+      thinking: { type: "adaptive" } as any,
+      output_config: { effort: "high" } as any,
       system: SYSTEM_PROMPT,
       messages: [
         {
@@ -147,7 +148,7 @@ export async function POST(request: NextRequest) {
           content,
         },
       ],
-    });
+    } as any);
 
     // Create a ReadableStream to stream back to the client
     const readable = new ReadableStream({
