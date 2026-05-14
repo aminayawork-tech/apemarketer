@@ -20,23 +20,21 @@ export default function ContextForm({ context, onChange, disabled }: ContextForm
   };
 
   const inputClass = `
-    w-full bg-[#0A0F0A] border border-[#2D5016] rounded-lg px-4 py-2.5 text-[#E8F5E9]
-    placeholder-[#6B9E2E]/40 focus:outline-none focus:border-[#6B9E2E] focus:ring-1 focus:ring-[#6B9E2E]/50
+    w-full bg-[#F9FBF7] border border-[#C5DBAA] rounded-lg px-4 py-2.5 text-[#1A2710]
+    placeholder-[#8AAD6A] focus:outline-none focus:border-[#3D7018] focus:ring-1 focus:ring-[#3D7018]/40
     transition-colors duration-200 text-sm
     disabled:opacity-50 disabled:cursor-not-allowed
   `;
 
   return (
     <div className="space-y-4">
-      <h2 className="text-[#F5A623] font-bold text-lg flex items-center gap-2">
-        <span>📋</span>
-        <span>Business Context</span>
+      <h2 className="text-[#B8680A] font-bold text-lg">
+        Business Context
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Business Type */}
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold text-[#6B9E2E] uppercase tracking-wider">
+          <label className="block text-xs font-semibold text-[#2D5016] uppercase tracking-wider">
             Business Type
           </label>
           <input
@@ -49,9 +47,8 @@ export default function ContextForm({ context, onChange, disabled }: ContextForm
           />
         </div>
 
-        {/* Target Customers */}
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold text-[#6B9E2E] uppercase tracking-wider">
+          <label className="block text-xs font-semibold text-[#2D5016] uppercase tracking-wider">
             Target Customers
           </label>
           <input
@@ -64,9 +61,8 @@ export default function ContextForm({ context, onChange, disabled }: ContextForm
           />
         </div>
 
-        {/* Goals */}
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold text-[#6B9E2E] uppercase tracking-wider">
+          <label className="block text-xs font-semibold text-[#2D5016] uppercase tracking-wider">
             Goals
           </label>
           <input
@@ -79,9 +75,8 @@ export default function ContextForm({ context, onChange, disabled }: ContextForm
           />
         </div>
 
-        {/* Constraints */}
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold text-[#6B9E2E] uppercase tracking-wider">
+          <label className="block text-xs font-semibold text-[#2D5016] uppercase tracking-wider">
             Constraints
           </label>
           <input
@@ -95,9 +90,8 @@ export default function ContextForm({ context, onChange, disabled }: ContextForm
         </div>
       </div>
 
-      {/* Additional Notes */}
       <div className="space-y-1.5">
-        <label className="block text-xs font-semibold text-[#6B9E2E] uppercase tracking-wider">
+        <label className="block text-xs font-semibold text-[#2D5016] uppercase tracking-wider">
           Additional Notes
         </label>
         <textarea
