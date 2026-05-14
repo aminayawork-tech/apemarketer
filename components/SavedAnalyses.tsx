@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
+import Chat from "@/components/Chat";
 
 export interface SavedAnalysis {
   id: string;
@@ -33,6 +34,7 @@ function AnalysisCard({
   onEdit: (title: string) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(analysis.title);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -75,17 +77,11 @@ function AnalysisCard({
                 className="flex-1 border border-[#3D7018] rounded-lg px-3 py-1.5 text-sm text-[#1A2710] focus:outline-none focus:ring-1 focus:ring-[#3D7018]/40"
                 autoFocus
               />
-              <button
-                onClick={handleSaveTitle}
-                className="text-xs font-semibold text-white bg-[#2D5016] px-3 py-1.5 rounded-lg"
-              >
+              <button onClick={handleSaveTitle} className="text-xs font-semibold text-white bg-[#2D5016] px-3 py-1.5 rounded-lg">
                 Save
               </button>
               <button
-                onClick={() => {
-                  setEditTitle(analysis.title);
-                  setEditing(false);
-                }}
+                onClick={() => { setEditTitle(analysis.title); setEditing(false); }}
                 className="text-xs text-[#4D6B38] border border-[#C5DBAA] px-3 py-1.5 rounded-lg"
               >
                 Cancel
@@ -101,42 +97,24 @@ function AnalysisCard({
         </div>
 
         <div className="flex items-center gap-1 flex-shrink-0">
-          {/* Edit button */}
+          {/* Edit */}
           {!editing && (
-            <button
-              onClick={() => setEditing(true)}
-              className="p-1.5 text-[#4D6B38] hover:bg-[#E4EFD8] rounded-lg transition-colors"
-              title="Edit title"
-            >
+            <button onClick={() => setEditing(true)} className="p-1.5 text-[#4D6B38] hover:bg-[#E4EFD8] rounded-lg transition-colors" title="Edit title">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
             </button>
           )}
 
-          {/* Delete button */}
+          {/* Delete */}
           {confirmDelete ? (
             <div className="flex items-center gap-1">
               <span className="text-xs text-red-600 font-medium">Delete?</span>
-              <button
-                onClick={onDelete}
-                className="text-xs font-semibold text-white bg-red-500 px-2 py-1 rounded-lg"
-              >
-                Yes
-              </button>
-              <button
-                onClick={() => setConfirmDelete(false)}
-                className="text-xs text-[#4D6B38] border border-[#C5DBAA] px-2 py-1 rounded-lg"
-              >
-                No
-              </button>
+              <button onClick={onDelete} className="text-xs font-semibold text-white bg-red-500 px-2 py-1 rounded-lg">Yes</button>
+              <button onClick={() => setConfirmDelete(false)} className="text-xs text-[#4D6B38] border border-[#C5DBAA] px-2 py-1 rounded-lg">No</button>
             </div>
           ) : (
-            <button
-              onClick={() => setConfirmDelete(true)}
-              className="p-1.5 text-red-400 hover:bg-red-50 rounded-lg transition-colors"
-              title="Delete"
-            >
+            <button onClick={() => setConfirmDelete(true)} className="p-1.5 text-red-400 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
@@ -149,12 +127,7 @@ function AnalysisCard({
             className="p-1.5 text-[#4D6B38] hover:bg-[#E4EFD8] rounded-lg transition-colors"
             title={expanded ? "Collapse" : "Expand"}
           >
-            <svg
-              className={`w-4 h-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className={`w-4 h-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
           </button>
@@ -163,31 +136,55 @@ function AnalysisCard({
 
       {/* Expanded content */}
       {expanded && (
-        <div className="border-t border-[#E4EFD8] p-4">
+        <div className="border-t border-[#E4EFD8]">
+          {/* Context summary */}
           {(analysis.context.goals || analysis.context.constraints || analysis.context.additionalNotes) && (
-            <div className="mb-4 p-3 bg-[#F5F7F4] rounded-lg text-xs space-y-1">
-              {analysis.context.goals && (
-                <p className="text-[#4D6B38]">
-                  <span className="font-semibold uppercase tracking-wider text-[#2D5016]">Goals: </span>
-                  {analysis.context.goals}
-                </p>
-              )}
-              {analysis.context.constraints && (
-                <p className="text-[#4D6B38]">
-                  <span className="font-semibold uppercase tracking-wider text-[#2D5016]">Constraints: </span>
-                  {analysis.context.constraints}
-                </p>
-              )}
-              {analysis.context.additionalNotes && (
-                <p className="text-[#4D6B38]">
-                  <span className="font-semibold uppercase tracking-wider text-[#2D5016]">Notes: </span>
-                  {analysis.context.additionalNotes}
-                </p>
-              )}
+            <div className="p-4 pb-0">
+              <div className="p-3 bg-[#F5F7F4] rounded-lg text-xs space-y-1">
+                {analysis.context.goals && (
+                  <p className="text-[#4D6B38]">
+                    <span className="font-semibold uppercase tracking-wider text-[#2D5016]">Goals: </span>
+                    {analysis.context.goals}
+                  </p>
+                )}
+                {analysis.context.constraints && (
+                  <p className="text-[#4D6B38]">
+                    <span className="font-semibold uppercase tracking-wider text-[#2D5016]">Constraints: </span>
+                    {analysis.context.constraints}
+                  </p>
+                )}
+                {analysis.context.additionalNotes && (
+                  <p className="text-[#4D6B38]">
+                    <span className="font-semibold uppercase tracking-wider text-[#2D5016]">Notes: </span>
+                    {analysis.context.additionalNotes}
+                  </p>
+                )}
+              </div>
             </div>
           )}
-          <div className="markdown-content">
+
+          {/* Analysis content */}
+          <div className="p-4 markdown-content">
             <ReactMarkdown>{analysis.content}</ReactMarkdown>
+          </div>
+
+          {/* Chat toggle */}
+          <div className="px-4 pb-4">
+            <button
+              onClick={() => setShowChat(!showChat)}
+              className="flex items-center gap-2 text-sm font-semibold text-[#2D5016] hover:text-[#3a6820] transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              {showChat ? "Hide chat" : "Ask the Guru about this"}
+            </button>
+
+            {showChat && (
+              <div className="mt-3">
+                <Chat initialAnalysis={analysis.content} context={analysis.context} />
+              </div>
+            )}
           </div>
         </div>
       )}
