@@ -48,8 +48,15 @@ When the user uploads media, immediately jump into the analysis — no greeting 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const imageFile = formData.get("image") as File | null;
     const contextStr = formData.get("context") as string | null;
+
+    // Collect up to 5 images sent as image_0, image_1, ...
+    const imageFiles: File[] = [];
+    for (let i = 0; i < 5; i++) {
+      const f = formData.get(`image_${i}`) as File | null;
+      if (!f || f.size === 0) break;
+      imageFiles.push(f);
+    }
 
     // Parse context
     let context: {
@@ -102,28 +109,20 @@ export async function POST(request: NextRequest) {
 
     const content: ContentBlock[] = [];
 
-    // Add image if provided
-    if (imageFile && imageFile.size > 0) {
-      const arrayBuffer = await imageFile.arrayBuffer();
+    // Add all images
+    for (const imgFile of imageFiles) {
+      const arrayBuffer = await imgFile.arrayBuffer();
       const base64 = Buffer.from(arrayBuffer).toString("base64");
 
-      // Determine media type
-      let mediaType: "image/jpeg" | "image/png" | "image/gif" | "image/webp" =
-        "image/jpeg";
-      const fileType = imageFile.type.toLowerCase();
+      let mediaType: "image/jpeg" | "image/png" | "image/gif" | "image/webp" = "image/jpeg";
+      const fileType = imgFile.type.toLowerCase();
       if (fileType.includes("png")) mediaType = "image/png";
       else if (fileType.includes("gif")) mediaType = "image/gif";
       else if (fileType.includes("webp")) mediaType = "image/webp";
-      else if (fileType.includes("jpeg") || fileType.includes("jpg"))
-        mediaType = "image/jpeg";
 
       content.push({
         type: "image",
-        source: {
-          type: "base64",
-          media_type: mediaType,
-          data: base64,
-        },
+        source: { type: "base64", media_type: mediaType, data: base64 },
       });
     }
 

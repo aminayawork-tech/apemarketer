@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import UploadZone from "@/components/UploadZone";
 import ContextForm from "@/components/ContextForm";
 import AnalysisResult from "@/components/AnalysisResult";
+import Chat from "@/components/Chat";
 import SavedAnalyses, { SavedAnalysis } from "@/components/SavedAnalyses";
 
 interface ContextData {
@@ -24,7 +25,7 @@ const defaultContext: ContextData = {
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<"analyze" | "saved">("analyze");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [context, setContext] = useState<ContextData>(defaultContext);
   const [analysisContent, setAnalysisContent] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
@@ -36,9 +37,7 @@ export default function HomePage() {
     try {
       const stored = localStorage.getItem("savedAnalyses");
       if (stored) setSavedAnalyses(JSON.parse(stored));
-    } catch {
-      // ignore
-    }
+    } catch { /* ignore */ }
   }, []);
 
   const hasContent = analysisContent.length > 0 || isStreaming || !!error;
@@ -52,13 +51,10 @@ export default function HomePage() {
 
     try {
       const formData = new FormData();
-      if (selectedFile) formData.append("image", selectedFile);
+      selectedFiles.forEach((file, i) => formData.append(`image_${i}`, file));
       formData.append("context", JSON.stringify(context));
 
-      const response = await fetch("/api/analyze", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch("/api/analyze", { method: "POST", body: formData });
 
       if (!response.ok) {
         let errMsg = `Request failed with status ${response.status}`;
@@ -76,8 +72,7 @@ export default function HomePage() {
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        setAnalysisContent((prev: string) => prev + chunk);
+        setAnalysisContent((prev: string) => prev + decoder.decode(value, { stream: true }));
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unexpected error occurred");
@@ -119,7 +114,7 @@ export default function HomePage() {
   };
 
   const handleReset = () => {
-    setSelectedFile(null);
+    setSelectedFiles([]);
     setContext(defaultContext);
     setAnalysisContent("");
     setError(null);
@@ -141,15 +136,12 @@ export default function HomePage() {
             Gorilla Marketing <span className="text-[#B8680A]">Guru</span>
           </h1>
           <p className="text-[#4D6B38] text-base sm:text-lg max-w-lg mx-auto leading-relaxed">
-            Drop a photo of your business location and get street-smart,
+            Drop photos of your business location and get street-smart,
             AI-powered guerrilla marketing tactics — instantly.
           </p>
           <div className="flex items-center justify-center gap-3 mt-4 flex-wrap">
             {["Zero BS", "Hyper-Tactical", "Instantly Actionable"].map((tag) => (
-              <span
-                key={tag}
-                className="px-3 py-1 text-xs font-semibold bg-[#E4EFD8] text-[#2D5016] rounded-full border border-[#C5DBAA]"
-              >
+              <span key={tag} className="px-3 py-1 text-xs font-semibold bg-[#E4EFD8] text-[#2D5016] rounded-full border border-[#C5DBAA]">
                 {tag}
               </span>
             ))}
@@ -161,9 +153,7 @@ export default function HomePage() {
           <button
             onClick={() => setActiveTab("analyze")}
             className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-150 ${
-              activeTab === "analyze"
-                ? "bg-white text-[#1A2710] shadow-sm"
-                : "text-[#4D6B38] hover:text-[#1A2710]"
+              activeTab === "analyze" ? "bg-white text-[#1A2710] shadow-sm" : "text-[#4D6B38] hover:text-[#1A2710]"
             }`}
           >
             Analyze
@@ -171,9 +161,7 @@ export default function HomePage() {
           <button
             onClick={() => setActiveTab("saved")}
             className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-150 flex items-center justify-center gap-2 ${
-              activeTab === "saved"
-                ? "bg-white text-[#1A2710] shadow-sm"
-                : "text-[#4D6B38] hover:text-[#1A2710]"
+              activeTab === "saved" ? "bg-white text-[#1A2710] shadow-sm" : "text-[#4D6B38] hover:text-[#1A2710]"
             }`}
           >
             Saved
@@ -197,9 +185,9 @@ export default function HomePage() {
                 <section>
                   <h2 className="text-[#B8680A] font-bold text-lg mb-4">
                     Upload Your Location
-                    <span className="text-xs font-normal text-[#8AAD6A] ml-2">(optional)</span>
+                    <span className="text-xs font-normal text-[#8AAD6A] ml-2">(optional · up to 5 photos)</span>
                   </h2>
-                  <UploadZone onFileSelect={setSelectedFile} selectedFile={selectedFile} />
+                  <UploadZone onFilesSelect={setSelectedFiles} selectedFiles={selectedFiles} />
                 </section>
 
                 <div className="border-t border-[#E4EFD8]" />
@@ -247,16 +235,11 @@ export default function HomePage() {
 
             {/* Analysis Result */}
             {hasContent && (
-              <div className="mt-8">
-                <AnalysisResult
-                  content={analysisContent}
-                  isStreaming={isStreaming}
-                  error={error}
-                />
+              <div className="mt-8 space-y-4">
+                <AnalysisResult content={analysisContent} isStreaming={isStreaming} error={error} />
 
-                {/* Save button */}
                 {canSave && (
-                  <div className="mt-4 flex justify-end">
+                  <div className="flex justify-end">
                     <button
                       onClick={handleSave}
                       className="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#C5DBAA] text-[#2D5016] font-semibold text-sm rounded-xl hover:bg-[#E4EFD8] transition-colors shadow-sm"
@@ -270,7 +253,7 @@ export default function HomePage() {
                 )}
 
                 {isSaved && (
-                  <div className="mt-4 flex justify-end">
+                  <div className="flex justify-end">
                     <span className="flex items-center gap-2 px-5 py-2.5 bg-[#E4EFD8] text-[#2D5016] font-semibold text-sm rounded-xl">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -279,11 +262,15 @@ export default function HomePage() {
                     </span>
                   </div>
                 )}
+
+                {/* Chat — only shown when analysis is complete */}
+                {!isStreaming && analysisContent && !error && (
+                  <Chat initialAnalysis={analysisContent} context={context} />
+                )}
               </div>
             )}
           </>
         ) : (
-          /* Saved Tab */
           <SavedAnalyses
             analyses={savedAnalyses}
             onDelete={handleDeleteSaved}
