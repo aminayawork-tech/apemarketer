@@ -7,6 +7,7 @@ import AnalysisResult from "@/components/AnalysisResult";
 import Chat from "@/components/Chat";
 import SavedAnalyses, { SavedAnalysis } from "@/components/SavedAnalyses";
 import Stories from "@/components/Stories";
+import { compressImage } from "@/utils/compressImage";
 
 interface ContextData {
   businessType: string;
@@ -52,17 +53,22 @@ export default function HomePage() {
 
     try {
       const formData = new FormData();
-      selectedFiles.forEach((file, i) => formData.append(`image_${i}`, file));
+      // Compress images client-side to stay under Vercel's 4.5MB body limit
+      const compressed = await Promise.all(selectedFiles.map((f) => compressImage(f)));
+      compressed.forEach((file, i) => formData.append(`image_${i}`, file));
       formData.append("context", JSON.stringify(context));
 
       const response = await fetch("/api/analyze", { method: "POST", body: formData });
 
       if (!response.ok) {
         let errMsg = `Request failed with status ${response.status}`;
-        try {
-          const json = await response.json();
-          if (json.error) errMsg = json.error;
-        } catch { /* ignore */ }
+        if (response.status === 413) errMsg = "Images are too large to send. Try fewer photos or smaller files.";
+        else {
+          try {
+            const json = await response.json();
+            if (json.error) errMsg = json.error;
+          } catch { /* ignore */ }
+        }
         throw new Error(errMsg);
       }
 

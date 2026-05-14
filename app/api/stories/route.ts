@@ -7,9 +7,9 @@ export async function POST(request: NextRequest) {
 
     const prompt = `You are a master storyteller specializing in guerrilla marketing success stories, deeply inspired by Jay Conrad Levinson's "Guerrilla Marketing" books.
 
-Generate exactly 5 short guerrilla marketing success stories. Today is ${date} — make these stories feel fresh and specific to this moment. Vary the industries, cities, and tactics across the 5 stories.
+Generate exactly 3 short guerrilla marketing success stories. Today is ${date} — make these stories feel fresh and specific to this moment. Vary the industries, cities, and tactics across the 3 stories.
 
-Choose 5 different business types (restaurants, food trucks, retail boutiques, gyms, salons, auto shops, coffee shops, bookstores, dental offices, pet shops, hardware stores, real estate agents, service businesses, etc.).
+Choose 3 different business types (restaurants, food trucks, retail boutiques, gyms, salons, auto shops, coffee shops, bookstores, dental offices, pet shops, hardware stores, real estate agents, service businesses, etc.).
 
 Format each story exactly like this — do not deviate from this structure:
 
