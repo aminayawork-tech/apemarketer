@@ -291,8 +291,7 @@ export default function HomePage() {
           />
         )}
 
-        <footer className="mt-12 text-center text-[#8AAD6A] text-xs space-y-1">
-          <p>Powered by Claude AI — Gorilla Marketing Guru</p>
+        <footer className="mt-12 text-center text-[#8AAD6A] text-xs">
           <p>Upload any business location photo for instant guerrilla marketing tactics</p>
         </footer>
       </div>
