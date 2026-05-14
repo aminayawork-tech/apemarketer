@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
 
     // Initialize Anthropic client
     const client = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY,
+      apiKey: process.env.CLAUDE_API ?? process.env.ANTHROPIC_API_KEY,
     });
 
     // Build message content
