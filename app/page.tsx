@@ -138,21 +138,20 @@ export default function HomePage() {
             Gorilla Marketing Guru · AI-Powered · Zero BS
           </p>
 
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex items-center gap-3 mb-4">
             <Image
               src="/logo.png"
               alt="Ape Marketer"
-              width={90}
-              height={90}
+              width={72}
+              height={72}
               priority
               className="flex-shrink-0"
             />
             <h1
               className="font-display font-extrabold text-[#0D0D0D] leading-none"
-              style={{ fontSize: "clamp(3rem, 13vw, 5.75rem)", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(2.5rem, 10vw, 5rem)", letterSpacing: "-0.02em" }}
             >
-              APE<br />
-              <span className="text-[#E05C0A]">MARKETER</span>
+              APE <span className="text-[#E05C0A]">MARKETER</span>
             </h1>
           </div>
 
