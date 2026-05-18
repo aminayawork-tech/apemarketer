@@ -1,5 +1,13 @@
 import type { Metadata, Viewport } from "next";
+import { Barlow_Condensed } from "next/font/google";
 import "./globals.css";
+
+const barlowCondensed = Barlow_Condensed({
+  weight: ["700", "800"],
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -28,8 +36,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-[#F5F7F4] text-[#1A2710] antialiased">
+    <html lang="en" className={barlowCondensed.variable}>
+      <body className="min-h-screen bg-[#F2EDE4] text-[#0D0D0D] antialiased">
         {children}
       </body>
     </html>

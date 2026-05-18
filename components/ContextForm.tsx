@@ -20,21 +20,21 @@ export default function ContextForm({ context, onChange, disabled }: ContextForm
   };
 
   const inputClass = `
-    w-full bg-[#F9FBF7] border border-[#C5DBAA] rounded-lg px-4 py-2.5 text-[#1A2710]
-    placeholder-[#8AAD6A] focus:outline-none focus:border-[#3D7018] focus:ring-1 focus:ring-[#3D7018]/40
+    w-full bg-[#F2EDE4] border border-[#D0C4B8] rounded px-4 py-2.5 text-[#0D0D0D]
+    placeholder-[#A09590] focus:outline-none focus:border-[#111111] focus:ring-1 focus:ring-[#111111]/20
     transition-colors duration-200 text-sm
     disabled:opacity-50 disabled:cursor-not-allowed
   `;
 
   return (
     <div className="space-y-4">
-      <h2 className="text-[#B8680A] font-bold text-lg">
+      <h2 className="text-xs font-bold tracking-widest uppercase text-[#A09590]">
         Business Context
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold text-[#2D5016] uppercase tracking-wider">
+          <label className="block text-xs font-bold text-[#111111] uppercase tracking-wider">
             Business Type
           </label>
           <input
@@ -48,7 +48,7 @@ export default function ContextForm({ context, onChange, disabled }: ContextForm
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold text-[#2D5016] uppercase tracking-wider">
+          <label className="block text-xs font-bold text-[#111111] uppercase tracking-wider">
             Target Customers
           </label>
           <input
@@ -62,21 +62,21 @@ export default function ContextForm({ context, onChange, disabled }: ContextForm
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold text-[#2D5016] uppercase tracking-wider">
+          <label className="block text-xs font-bold text-[#111111] uppercase tracking-wider">
             Goals
           </label>
           <input
             type="text"
             value={context.goals}
             onChange={(e) => handleChange("goals", e.target.value)}
-            placeholder="Increase impulse buys, drive foot traffic..."
+            placeholder="Increase foot traffic, drive impulse buys..."
             className={inputClass}
             disabled={disabled}
           />
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold text-[#2D5016] uppercase tracking-wider">
+          <label className="block text-xs font-bold text-[#111111] uppercase tracking-wider">
             Constraints
           </label>
           <input
@@ -91,7 +91,7 @@ export default function ContextForm({ context, onChange, disabled }: ContextForm
       </div>
 
       <div className="space-y-1.5">
-        <label className="block text-xs font-semibold text-[#2D5016] uppercase tracking-wider">
+        <label className="block text-xs font-bold text-[#111111] uppercase tracking-wider">
           Additional Notes
         </label>
         <textarea

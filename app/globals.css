@@ -3,11 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --bg: #F5F7F4;
-  --primary: #2D5016;
-  --accent: #3D7018;
-  --highlight: #B8680A;
-  --text: #1A2710;
+  --bg: #F2EDE4;
+  --surface: #FDFAF6;
+  --dark: #111111;
+  --text: #0D0D0D;
+  --text-muted: #6B5F57;
+  --text-faint: #A09590;
+  --border: #D0C4B8;
+  --border-light: #E0D8CF;
+  --orange: #E05C0A;
 }
 
 html {
@@ -26,31 +30,33 @@ body {
 }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #E8EFE3; }
-::-webkit-scrollbar-thumb { background: #A8C88A; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #3D7018; }
+::-webkit-scrollbar-track { background: #E8E0D5; }
+::-webkit-scrollbar-thumb { background: #C0B4A8; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #E05C0A; }
 
 /* ── Main analysis markdown ── */
 .markdown-content h2 {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: #B8680A;
+  color: #E05C0A;
   margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.6rem;
   padding-bottom: 0.25rem;
-  border-bottom: 1px solid #C5DBAA;
+  border-bottom: 1px solid #D0C4B8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 .markdown-content h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #2D5016;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111111;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
 .markdown-content p {
   margin-bottom: 0.75rem;
-  line-height: 1.7;
-  color: #1A2710;
+  line-height: 1.75;
+  color: #0D0D0D;
 }
 .markdown-content ul,
 .markdown-content ol {
@@ -59,39 +65,39 @@ body {
 }
 .markdown-content li {
   margin-bottom: 0.4rem;
-  line-height: 1.6;
-  color: #1A2710;
+  line-height: 1.65;
+  color: #0D0D0D;
 }
-.markdown-content ul li::marker { color: #3D7018; }
-.markdown-content ol li::marker { color: #B8680A; font-weight: 600; }
-.markdown-content strong { color: #B8680A; font-weight: 700; }
-.markdown-content em { color: #2D5016; font-style: italic; }
+.markdown-content ul li::marker { color: #E05C0A; }
+.markdown-content ol li::marker { color: #E05C0A; font-weight: 700; }
+.markdown-content strong { color: #111111; font-weight: 700; }
+.markdown-content em { color: #5A4F47; font-style: italic; }
 .markdown-content code {
-  background: #EEF4E8;
-  border: 1px solid #C5DBAA;
-  border-radius: 4px;
-  padding: 0.1rem 0.4rem;
-  font-size: 0.875rem;
-  color: #2D5016;
+  background: #EAE3D8;
+  border: 1px solid #D0C4B8;
+  border-radius: 3px;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.85rem;
+  color: #111111;
 }
 .markdown-content blockquote {
-  border-left: 3px solid #B8680A;
+  border-left: 3px solid #E05C0A;
   padding-left: 1rem;
   margin: 1rem 0;
-  color: #4D6B38;
+  color: #5A4F47;
   font-style: italic;
 }
 .markdown-content hr {
   border: none;
-  border-top: 1px solid #C5DBAA;
+  border-top: 1px solid #D0C4B8;
   margin: 1.5rem 0;
 }
 
 /* ── Stories reading view ── */
 .story-content h2 {
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   font-weight: 800;
-  color: #1A2710;
+  color: #0D0D0D;
   margin-top: 2.5rem;
   margin-bottom: 0.35rem;
   border-bottom: none;
@@ -103,59 +109,59 @@ body {
 .story-content p {
   margin-bottom: 0.85rem;
   line-height: 1.8;
-  color: #2A3D1A;
+  color: #1A1410;
   font-size: 0.9625rem;
 }
-.story-content ul li::marker { color: #3D7018; }
-.story-content strong { color: #B8680A; font-weight: 700; }
-.story-content em { color: #2D5016; font-style: italic; }
+.story-content ul li::marker { color: #E05C0A; }
+.story-content strong { color: #E05C0A; font-weight: 700; }
+.story-content em { color: #5A4F47; font-style: italic; }
 .story-content hr {
   border: none;
-  border-top: 2px solid #E4EFD8;
+  border-top: 2px solid #E0D8CF;
   margin: 2.5rem 0;
 }
 .story-content blockquote {
-  border-left: 4px solid #B8680A;
-  background: #FEFAF4;
-  border-radius: 0 12px 12px 0;
+  border-left: 4px solid #E05C0A;
+  background: #111111;
+  border-radius: 0 6px 6px 0;
   padding: 0.875rem 1.25rem;
   margin: 1.25rem 0 0;
-  color: #3D2E0A;
+  color: #F2EDE4;
   font-style: normal;
 }
 .story-content blockquote strong {
-  color: #B8680A;
+  color: #E05C0A;
   font-weight: 700;
   font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 .story-content blockquote p {
   margin: 0;
   font-size: 0.9rem;
-  color: #3D2E0A;
+  color: #EAE3D8;
 }
 
 /* ── Chat bubble markdown (smaller, tighter) ── */
 .chat-markdown h2 {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #B8680A;
+  color: #E05C0A;
   margin-top: 0.75rem;
   margin-bottom: 0.25rem;
   border-bottom: none;
 }
 .chat-markdown h3 {
   font-size: 0.875rem;
-  font-weight: 600;
-  color: #2D5016;
+  font-weight: 700;
+  color: #111111;
   margin-top: 0.5rem;
   margin-bottom: 0.25rem;
 }
 .chat-markdown p {
   margin-bottom: 0.5rem;
   line-height: 1.6;
-  color: #1A2710;
+  color: #0D0D0D;
   font-size: 0.875rem;
 }
 .chat-markdown ul,
@@ -166,10 +172,10 @@ body {
 .chat-markdown li {
   margin-bottom: 0.2rem;
   line-height: 1.5;
-  color: #1A2710;
+  color: #0D0D0D;
   font-size: 0.875rem;
 }
-.chat-markdown ul li::marker { color: #3D7018; }
-.chat-markdown ol li::marker { color: #B8680A; font-weight: 600; }
-.chat-markdown strong { color: #B8680A; font-weight: 600; }
-.chat-markdown em { color: #2D5016; font-style: italic; }
+.chat-markdown ul li::marker { color: #E05C0A; }
+.chat-markdown ol li::marker { color: #E05C0A; font-weight: 700; }
+.chat-markdown strong { color: #111111; font-weight: 700; }
+.chat-markdown em { color: #5A4F47; font-style: italic; }

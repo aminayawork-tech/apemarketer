@@ -28,7 +28,6 @@ function formatDate(dateStr: string) {
 }
 
 function parseStories(markdown: string): ParsedStory[] {
-  // Split on horizontal rules (--- on its own line)
   const blocks = markdown.split(/\n---+\n/).map((b) => b.trim()).filter(Boolean);
   return blocks.map((block) => {
     const titleMatch = block.match(/^##\s+(.+)$/m);
@@ -49,14 +48,14 @@ function StoryCard({
   alreadySaved: boolean;
 }) {
   return (
-    <div className="bg-white border border-[#C5DBAA] rounded-2xl shadow-sm overflow-hidden">
+    <div className="bg-[#FDFAF6] border border-[#D0C4B8] rounded-lg overflow-hidden">
       <div className="p-6 sm:p-8 story-content">
         <ReactMarkdown>{story.content}</ReactMarkdown>
       </div>
-      <div className="px-6 pb-5 flex justify-end border-t border-[#E4EFD8] pt-4">
+      <div className="px-6 pb-5 flex justify-end border-t border-[#E0D8CF] pt-4">
         {alreadySaved ? (
-          <span className="flex items-center gap-1.5 text-xs font-semibold text-[#3D7018]">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <span className="flex items-center gap-1.5 text-xs font-bold text-[#111111] uppercase tracking-wide">
+            <svg className="w-4 h-4 text-[#E05C0A]" fill="currentColor" viewBox="0 0 24 24">
               <path d="M5 3a2 2 0 00-2 2v16l7-3.5L17 21V5a2 2 0 00-2-2H5z" />
             </svg>
             Saved
@@ -64,7 +63,7 @@ function StoryCard({
         ) : (
           <button
             onClick={onSave}
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-[#2D5016] border border-[#C5DBAA] rounded-xl hover:bg-[#E4EFD8] transition-colors"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#111111] border border-[#D0C4B8] rounded hover:bg-[#EAE3D8] hover:border-[#111111] transition-colors uppercase tracking-wide"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
@@ -82,21 +81,21 @@ function SavedStoryCard({ story, onDelete }: { story: SavedStory; onDelete: () =
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
-    <div className="bg-white border border-[#C5DBAA] rounded-xl shadow-sm overflow-hidden">
+    <div className="bg-[#FDFAF6] border border-[#D0C4B8] rounded-lg overflow-hidden">
       <div className="p-4 flex items-start gap-3">
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-[#1A2710] text-sm truncate">{story.title}</h3>
-          <p className="text-xs text-[#8AAD6A] mt-0.5">Saved from {formatDate(story.generatedDate)}</p>
+          <h3 className="font-bold text-[#0D0D0D] text-sm truncate">{story.title}</h3>
+          <p className="text-xs text-[#A09590] mt-0.5">Saved from {formatDate(story.generatedDate)}</p>
         </div>
         <div className="flex items-center gap-1 flex-shrink-0">
           {confirmDelete ? (
             <div className="flex items-center gap-1">
               <span className="text-xs text-red-600 font-medium">Remove?</span>
-              <button onClick={onDelete} className="text-xs font-semibold text-white bg-red-500 px-2 py-1 rounded-lg">Yes</button>
-              <button onClick={() => setConfirmDelete(false)} className="text-xs text-[#4D6B38] border border-[#C5DBAA] px-2 py-1 rounded-lg">No</button>
+              <button onClick={onDelete} className="text-xs font-bold text-white bg-red-500 px-2 py-1 rounded">Yes</button>
+              <button onClick={() => setConfirmDelete(false)} className="text-xs text-[#6B5F57] border border-[#D0C4B8] px-2 py-1 rounded">No</button>
             </div>
           ) : (
-            <button onClick={() => setConfirmDelete(true)} className="p-1.5 text-red-400 hover:bg-red-50 rounded-lg transition-colors">
+            <button onClick={() => setConfirmDelete(true)} className="p-1.5 text-red-400 hover:bg-red-50 rounded transition-colors">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
@@ -104,7 +103,7 @@ function SavedStoryCard({ story, onDelete }: { story: SavedStory; onDelete: () =
           )}
           <button
             onClick={() => setExpanded(!expanded)}
-            className="p-1.5 text-[#4D6B38] hover:bg-[#E4EFD8] rounded-lg transition-colors"
+            className="p-1.5 text-[#A09590] hover:text-[#0D0D0D] hover:bg-[#EAE3D8] rounded transition-colors"
           >
             <svg className={`w-4 h-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -113,7 +112,7 @@ function SavedStoryCard({ story, onDelete }: { story: SavedStory; onDelete: () =
         </div>
       </div>
       {expanded && (
-        <div className="border-t border-[#E4EFD8] p-5 story-content">
+        <div className="border-t border-[#E0D8CF] p-5 story-content">
           <ReactMarkdown>{story.content}</ReactMarkdown>
         </div>
       )}
@@ -132,7 +131,6 @@ export default function Stories() {
   const [showSaved, setShowSaved] = useState(false);
 
   useEffect(() => {
-    // Load saved stories
     try {
       const raw = localStorage.getItem(SAVED_KEY);
       if (raw) {
@@ -141,7 +139,6 @@ export default function Stories() {
       }
     } catch { /* ignore */ }
 
-    // Load or generate today's stories
     try {
       const cached = localStorage.getItem(CACHE_KEY);
       if (cached) {
@@ -159,7 +156,6 @@ export default function Stories() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Keep savedIds in sync for quick lookup
   useEffect(() => {
     const ids = new Set(savedStories.map((s) => s.title + s.generatedDate));
     setSavedIds(ids);
@@ -224,22 +220,26 @@ export default function Stories() {
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="bg-white border border-[#C5DBAA] rounded-2xl shadow-sm overflow-hidden">
-        <div className="h-1 bg-gradient-to-r from-[#2D5016] via-[#3D7018] to-[#B8680A]" />
+      <div className="bg-[#111111] rounded-lg overflow-hidden">
+        <div className="h-1 bg-[#E05C0A]" />
         <div className="p-6">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <svg className="w-5 h-5 text-[#B8680A] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-                <h2 className="text-xl font-extrabold text-[#1A2710]">Guerrilla Stories</h2>
-              </div>
-              <p className="text-[#4D6B38] text-sm leading-relaxed">
+              <p className="text-xs font-bold tracking-widest uppercase text-[#6B5F57] mb-1">
+                Daily Inspiration
+              </p>
+              <h2
+                className="font-display font-extrabold text-[#F2EDE4] leading-none mb-2"
+                style={{ fontSize: "clamp(1.75rem, 7vw, 2.75rem)", letterSpacing: "-0.02em" }}
+              >
+                GUERRILLA<br />
+                <span className="text-[#E05C0A]">STORIES</span>
+              </h2>
+              <p className="text-[#A09590] text-sm leading-relaxed">
                 Inspired by Jay Conrad Levinson. Three fresh stories every day — save the ones that spark ideas.
               </p>
               {cachedDate && !isGenerating && (
-                <p className="text-xs text-[#8AAD6A] mt-2 flex items-center gap-1">
+                <p className="text-xs text-[#6B5F57] mt-2 flex items-center gap-1.5">
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
@@ -250,19 +250,19 @@ export default function Stories() {
             <button
               onClick={generate}
               disabled={isGenerating}
-              className="flex-shrink-0 flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[#2D5016] border border-[#C5DBAA] bg-[#F9FBF7] rounded-xl hover:bg-[#E4EFD8] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex-shrink-0 flex items-center gap-2 px-4 py-2 text-xs font-bold text-[#F2EDE4] border border-[#3a3a3a] bg-[#1a1a1a] rounded hover:bg-[#2a2a2a] disabled:opacity-50 disabled:cursor-not-allowed transition-colors uppercase tracking-widest"
             >
               <svg className={`w-4 h-4 ${isGenerating ? "animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
-              {isGenerating ? "Writing..." : "New Stories"}
+              {isGenerating ? "Writing..." : "New"}
             </button>
           </div>
         </div>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-600 flex items-center gap-2">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-600 flex items-center gap-2">
           <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
           </svg>
@@ -270,33 +270,30 @@ export default function Stories() {
         </div>
       )}
 
-      {/* Loading skeleton */}
       {isGenerating && !rawContent && (
-        <div className="bg-white border border-[#C5DBAA] rounded-2xl p-6 shadow-sm space-y-4">
+        <div className="bg-[#FDFAF6] border border-[#D0C4B8] rounded-lg p-6 space-y-4">
           <div className="space-y-2">
-            <div className="h-5 bg-[#E4EFD8] rounded animate-pulse w-1/2" />
-            <div className="h-3 bg-[#E4EFD8] rounded animate-pulse w-1/3" />
+            <div className="h-5 bg-[#EAE3D8] rounded animate-pulse w-1/2" />
+            <div className="h-3 bg-[#EAE3D8] rounded animate-pulse w-1/3" />
           </div>
           <div className="space-y-2 pt-2">
             {[95, 88, 75, 90, 65, 80, 70].map((w, i) => (
-              <div key={i} className="h-3 bg-[#E4EFD8] rounded animate-pulse" style={{ width: `${w}%`, animationDelay: `${i * 80}ms` }} />
+              <div key={i} className="h-3 bg-[#EAE3D8] rounded animate-pulse" style={{ width: `${w}%`, animationDelay: `${i * 80}ms` }} />
             ))}
           </div>
-          <p className="text-xs text-[#8AAD6A] text-center pt-2">Writing today&apos;s stories...</p>
+          <p className="text-xs text-[#A09590] text-center pt-2">Writing today&apos;s stories...</p>
         </div>
       )}
 
-      {/* Streaming: show raw markdown until parsing is ready */}
       {isGenerating && rawContent && (
-        <div className="bg-white border border-[#C5DBAA] rounded-2xl shadow-sm overflow-hidden">
+        <div className="bg-[#FDFAF6] border border-[#D0C4B8] rounded-lg overflow-hidden">
           <div className="p-6 sm:p-8 story-content">
             <ReactMarkdown>{rawContent}</ReactMarkdown>
-            <span className="inline-block w-0.5 h-4 bg-[#3D7018] animate-pulse ml-0.5 align-middle" />
+            <span className="inline-block w-0.5 h-4 bg-[#E05C0A] animate-pulse ml-0.5 align-middle" />
           </div>
         </div>
       )}
 
-      {/* Parsed story cards (shown after streaming completes) */}
       {!isGenerating && stories.length > 0 && stories.map((story, i) => {
         const saveKey = story.title + (cachedDate ?? "");
         return (
@@ -309,15 +306,14 @@ export default function Stories() {
         );
       })}
 
-      {/* Saved Stories section */}
       {savedStories.length > 0 && (
         <div className="space-y-3">
           <button
             onClick={() => setShowSaved(!showSaved)}
-            className="w-full flex items-center justify-between px-4 py-3 bg-[#E4EFD8] rounded-xl font-semibold text-sm text-[#2D5016] hover:bg-[#d8eacc] transition-colors"
+            className="w-full flex items-center justify-between px-4 py-3 bg-[#111111] rounded-lg font-bold text-xs text-[#F2EDE4] hover:bg-[#1a1a1a] transition-colors uppercase tracking-widest"
           >
             <span className="flex items-center gap-2">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-[#E05C0A]" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M5 3a2 2 0 00-2 2v16l7-3.5L17 21V5a2 2 0 00-2-2H5z" />
               </svg>
               Saved Stories ({savedStories.length})

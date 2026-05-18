@@ -8,14 +8,8 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        jungle: {
-          bg: "#0A0F0A",
-          primary: "#2D5016",
-          accent: "#6B9E2E",
-          highlight: "#F5A623",
-          text: "#E8F5E9",
-        },
+      fontFamily: {
+        display: ["var(--font-display)", "Impact", "Arial Black", "sans-serif"],
       },
       keyframes: {
         blink: {
