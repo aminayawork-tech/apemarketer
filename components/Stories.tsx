@@ -232,11 +232,11 @@ export default function Stories() {
                 className="font-display font-extrabold text-[#F2EDE4] leading-none mb-2"
                 style={{ fontSize: "clamp(1.75rem, 7vw, 2.75rem)", letterSpacing: "-0.02em" }}
               >
-                GUERRILLA<br />
+                APE MARKETER<br />
                 <span className="text-[#E05C0A]">STORIES</span>
               </h2>
               <p className="text-[#A09590] text-sm leading-relaxed">
-                Inspired by Jay Conrad Levinson. Three fresh stories every day — save the ones that spark ideas.
+                Three fresh guerrilla marketing stories every day — save the ones that spark ideas.
               </p>
               {cachedDate && !isGenerating && (
                 <p className="text-xs text-[#6B5F57] mt-2 flex items-center gap-1.5">
