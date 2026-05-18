@@ -153,23 +153,12 @@ export default function HomePage() {
 
           <div className="border-t border-[#0D0D0D] mb-4" />
 
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <p className="text-xs font-semibold tracking-[0.2em] text-[#A09590] uppercase mb-1">
-                Gorilla Marketing Guru · AI-Powered · Zero BS
-              </p>
-              <p className="text-[#6B5F57] text-sm leading-relaxed max-w-md">
-                Drop photos of your location. Get street-smart, hyper-tactical guerrilla
-                marketing — instantly.
-              </p>
-            </div>
-            <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
-              {["Gorilla Marketing Guru", "AI-Powered", "Zero BS"].map((tag) => (
-                <span key={tag} className="px-2.5 py-1 text-xs font-bold tracking-widest uppercase bg-[#111111] text-[#F2EDE4] rounded-sm">
-                  {tag}
-                </span>
-              ))}
-            </div>
+          <div className="flex items-center gap-2 flex-wrap mb-0">
+            {["Gorilla Marketing Guru", "AI-Powered", "Zero BS"].map((tag) => (
+              <span key={tag} className="px-2.5 py-1 text-xs font-bold tracking-widest uppercase bg-[#111111] text-[#F2EDE4] rounded-sm">
+                {tag}
+              </span>
+            ))}
           </div>
         </header>
 
@@ -208,10 +197,7 @@ export default function HomePage() {
                   >
                     {isStreaming ? (
                       <>
-                        <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                        </svg>
+                        <Image src="/logo.png" alt="" width={22} height={22} className="animate-pulse" />
                         <span>Analyzing...</span>
                       </>
                     ) : (
