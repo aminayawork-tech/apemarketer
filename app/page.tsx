@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import blackLogo from "@/components/solid-silhouette--light-bg.png";
 import UploadZone from "@/components/UploadZone";
 import ContextForm from "@/components/ContextForm";
 import AnalysisResult from "@/components/AnalysisResult";
@@ -137,13 +139,14 @@ export default function HomePage() {
             Gorilla Marketing Guru · AI-Powered · Zero BS
           </p>
 
-          <h1
-            className="font-display font-extrabold text-[#0D0D0D] leading-none mb-4"
-            style={{ fontSize: "clamp(3rem, 13vw, 5.75rem)", letterSpacing: "-0.02em" }}
-          >
-            APE<br />
-            <span className="text-[#E05C0A]">MARKETER</span>
-          </h1>
+          <div className="mb-4">
+            <Image
+              src={blackLogo}
+              alt="Ape Marketer"
+              className="w-auto h-auto max-h-28"
+              priority
+            />
+          </div>
 
           <div className="border-t border-[#0D0D0D] mb-4" />
 
