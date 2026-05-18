@@ -275,18 +275,25 @@ export default function HomePage() {
             }`}
           >
             {tab === "analyze" && (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 8 V5 A1 1 0 0 1 5 4 H8" />
+                <path d="M16 4 H19 A1 1 0 0 1 20 5 V8" />
+                <path d="M20 16 V19 A1 1 0 0 1 19 20 H16" />
+                <path d="M8 20 H5 A1 1 0 0 1 4 19 V16" />
+                <line x1="3.5" y1="12" x2="20.5" y2="12" />
               </svg>
             )}
             {tab === "saved" && (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <path fillRule="evenodd" d="M6 4 H18 V20 L12 16 L6 20 Z M12 8.2 L10.95 10.1 L8.95 10.4 L10.5 11.9 L10.1 14 L12 13 L13.9 14 L13.5 11.9 L15.05 10.4 L13.05 10.1 Z" />
               </svg>
             )}
             {tab === "stories" && (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 3 H14 L19 8 V20 A1 1 0 0 1 18 21 H6 A1 1 0 0 1 5 20 V4 A1 1 0 0 1 6 3 Z" />
+                <path d="M14 3 V8 H19" />
+                <line x1="8.5" y1="13" x2="15" y2="13" />
+                <line x1="8.5" y1="16.5" x2="15" y2="16.5" />
               </svg>
             )}
             <span className="text-[10px] font-bold tracking-widest uppercase flex items-center gap-1">
