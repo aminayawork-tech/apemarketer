@@ -147,8 +147,8 @@ export default function Chat({ initialAnalysis, context }: ChatProps) {
           <div className={`${messagesHeight} overflow-y-auto p-4 space-y-3 transition-all duration-300 bg-[#F7F3ED]`}>
             {messages.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center px-4">
-                <div className="w-10 h-10 bg-[#111111] rounded flex items-center justify-center mb-3">
-                  <Image src="/logo-orange.png" alt="" width={28} height={28} />
+                <div className="w-16 h-16 bg-[#111111] rounded-xl flex items-center justify-center mb-3">
+                  <Image src="/logo-orange.png" alt="" width={44} height={44} />
                 </div>
                 <p className="text-[#0D0D0D] font-semibold text-sm mb-1">Ask the Ape anything</p>
                 <p className="text-[#A09590] text-sm leading-relaxed">
