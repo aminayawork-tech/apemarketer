@@ -41,7 +41,7 @@ export default function AnalysisResult({
         </h2>
         {isStreaming && (
           <div className="flex items-center gap-2 text-[#E05C0A] text-xs">
-            <Image src="/logo-orange.png" alt="" width={18} height={18} className="animate-pulse" />
+            <Image src="/logo.png" alt="" width={18} height={18} className="animate-pulse" />
             <div className="flex gap-1">
               <span className="w-1.5 h-1.5 bg-[#E05C0A] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
               <span className="w-1.5 h-1.5 bg-[#E05C0A] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />

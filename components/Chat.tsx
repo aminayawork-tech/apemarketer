@@ -98,7 +98,7 @@ export default function Chat({ initialAnalysis, context }: ChatProps) {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-[#111111] border-b border-[#2a2a2a]">
         <div className="flex items-center gap-2">
-          <Image src="/logo-orange.png" alt="" width={20} height={20} />
+          <Image src="/logo-orange.png" alt="" width={26} height={26} />
           <span className="text-xs font-bold text-[#F2EDE4] uppercase tracking-widest">Ask the Ape</span>
           {messages.length > 0 && (
             <span className="text-xs text-[#A09590]">· {Math.ceil(messages.length / 2)} exchanges</span>
@@ -147,10 +147,7 @@ export default function Chat({ initialAnalysis, context }: ChatProps) {
           <div className={`${messagesHeight} overflow-y-auto p-4 space-y-3 transition-all duration-300 bg-[#F7F3ED]`}>
             {messages.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center px-4">
-                <div className="w-24 h-24 bg-[#111111] rounded-2xl flex items-center justify-center mb-4">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/logo-orange.png" alt="" style={{ width: 68, height: 68, display: "block" }} />
-                </div>
+                <img src="/logo.png" alt="" style={{ width: 96, height: 96, display: "block", marginBottom: 16 }} />
                 <p className="text-[#0D0D0D] font-semibold text-sm mb-1">Ask the Ape anything</p>
                 <p className="text-[#A09590] text-sm leading-relaxed">
                   Dig into any tactic, get specifics, or build a game plan for today.
