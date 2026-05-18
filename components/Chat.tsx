@@ -98,8 +98,8 @@ export default function Chat({ initialAnalysis, context }: ChatProps) {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-[#111111] border-b border-[#2a2a2a]">
         <div className="flex items-center gap-2">
-          <Image src="/logo.png" alt="" width={20} height={20} />
-          <span className="text-xs font-bold text-[#F2EDE4] uppercase tracking-widest">Ask the Guru</span>
+          <Image src="/logo-orange.png" alt="" width={20} height={20} />
+          <span className="text-xs font-bold text-[#F2EDE4] uppercase tracking-widest">Ask the Ape</span>
           {messages.length > 0 && (
             <span className="text-xs text-[#A09590]">· {Math.ceil(messages.length / 2)} exchanges</span>
           )}
@@ -148,9 +148,9 @@ export default function Chat({ initialAnalysis, context }: ChatProps) {
             {messages.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center px-4">
                 <div className="w-10 h-10 bg-[#111111] rounded flex items-center justify-center mb-3">
-                  <Image src="/logo.png" alt="" width={28} height={28} />
+                  <Image src="/logo-orange.png" alt="" width={28} height={28} />
                 </div>
-                <p className="text-[#0D0D0D] font-semibold text-sm mb-1">Ask the Guru anything</p>
+                <p className="text-[#0D0D0D] font-semibold text-sm mb-1">Ask the Ape anything</p>
                 <p className="text-[#A09590] text-sm leading-relaxed">
                   Dig into any tactic, get specifics, or build a game plan for today.
                 </p>
