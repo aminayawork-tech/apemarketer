@@ -130,7 +130,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#F2EDE4]">
-      <div className="max-w-3xl mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto px-4 py-8 pb-28">
 
         {/* Header */}
         <header className="mb-8">
@@ -163,8 +163,8 @@ export default function HomePage() {
                 marketing — instantly.
               </p>
             </div>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              {["Hyper-Tactical", "Actionable"].map((tag) => (
+            <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
+              {["Gorilla Marketing Guru", "AI-Powered", "Zero BS"].map((tag) => (
                 <span key={tag} className="px-2.5 py-1 text-xs font-bold tracking-widest uppercase bg-[#111111] text-[#F2EDE4] rounded-sm">
                   {tag}
                 </span>
@@ -173,39 +173,6 @@ export default function HomePage() {
           </div>
         </header>
 
-        {/* Tabs */}
-        <div className="flex border border-[#D0C4B8] rounded-lg overflow-hidden mb-6 bg-[#FDFAF6]">
-          {(["analyze", "saved", "stories"] as const).map((tab, idx) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`flex-1 py-2.5 px-3 text-xs font-bold tracking-widest uppercase transition-all duration-150 flex items-center justify-center gap-1.5 ${
-                idx > 0 ? "border-l border-[#D0C4B8]" : ""
-              } ${
-                activeTab === tab
-                  ? "bg-[#111111] text-[#F2EDE4]"
-                  : "text-[#6B5F57] hover:text-[#0D0D0D] hover:bg-[#EAE3D8]"
-              }`}
-            >
-              {tab === "analyze" && "Analyze"}
-              {tab === "stories" && "Stories"}
-              {tab === "saved" && (
-                <>
-                  Saved
-                  {savedAnalyses.length > 0 && (
-                    <span className={`text-xs px-1.5 py-0.5 rounded-sm font-bold ${
-                      activeTab === "saved"
-                        ? "bg-[#E05C0A] text-white"
-                        : "bg-[#EAE3D8] text-[#6B5F57]"
-                    }`}>
-                      {savedAnalyses.length}
-                    </span>
-                  )}
-                </>
-              )}
-            </button>
-          ))}
-        </div>
 
         {activeTab === "analyze" ? (
           <>
@@ -309,11 +276,50 @@ export default function HomePage() {
           <Stories />
         )}
 
-        <footer className="mt-12 border-t border-[#D0C4B8] pt-5 flex items-center justify-between">
-          <p className="text-[#A09590] text-xs tracking-widest uppercase font-semibold">Gorilla Marketing Guru</p>
-          <p className="text-[#A09590] text-xs">Upload any location for instant tactics</p>
-        </footer>
       </div>
+
+      {/* Bottom nav */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-[#111111] border-t border-[#2a2a2a] flex safe-area-inset-bottom">
+        {(["analyze", "saved", "stories"] as const).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`flex-1 flex flex-col items-center justify-center gap-1 py-3 transition-colors duration-150 ${
+              activeTab === tab ? "text-[#E05C0A]" : "text-[#6B5F57] hover:text-[#A09590]"
+            }`}
+          >
+            {tab === "analyze" && (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            )}
+            {tab === "saved" && (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              </svg>
+            )}
+            {tab === "stories" && (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            )}
+            <span className="text-[10px] font-bold tracking-widest uppercase flex items-center gap-1">
+              {tab === "analyze" && "Analyze"}
+              {tab === "stories" && "Stories"}
+              {tab === "saved" && (
+                <>
+                  Saved
+                  {savedAnalyses.length > 0 && (
+                    <span className="bg-[#E05C0A] text-white text-[9px] px-1 py-0.5 rounded-sm font-bold leading-none">
+                      {savedAnalyses.length}
+                    </span>
+                  )}
+                </>
+              )}
+            </span>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }
