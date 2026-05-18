@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import blackLogo from "@/components/solid-silhouette--light-bg.png";
+import logoIcon from "@/components/v4-workwear-badge--premium-est-style.png";
 import UploadZone from "@/components/UploadZone";
 import ContextForm from "@/components/ContextForm";
 import AnalysisResult from "@/components/AnalysisResult";
@@ -139,13 +139,22 @@ export default function HomePage() {
             Gorilla Marketing Guru · AI-Powered · Zero BS
           </p>
 
-          <div className="mb-4">
+          <div className="flex items-center gap-4 mb-4">
             <Image
-              src={blackLogo}
-              alt="Ape Marketer"
-              className="w-auto h-auto max-h-28"
+              src={logoIcon}
+              alt="Ape Marketer logo"
+              height={80}
+              className="w-auto h-auto"
+              style={{ maxHeight: "80px" }}
               priority
             />
+            <h1
+              className="font-display font-extrabold text-[#0D0D0D] leading-none"
+              style={{ fontSize: "clamp(3rem, 13vw, 5.75rem)", letterSpacing: "-0.02em" }}
+            >
+              APE<br />
+              <span className="text-[#E05C0A]">MARKETER</span>
+            </h1>
           </div>
 
           <div className="border-t border-[#0D0D0D] mb-4" />

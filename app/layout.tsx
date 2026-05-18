@@ -19,6 +19,10 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "Gorilla Marketing Guru",
+  icons: {
+    icon: "/logo-icon.png",
+    apple: "/logo-icon.png",
+  },
   description:
     "AI-powered guerrilla marketing analysis for your business location. Upload photos or videos and get expert, street-smart marketing advice.",
   keywords: [
