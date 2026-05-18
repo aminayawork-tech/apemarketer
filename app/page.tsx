@@ -134,10 +134,6 @@ export default function HomePage() {
 
         {/* Header */}
         <header className="mb-8">
-          <p className="text-xs font-semibold tracking-[0.2em] text-[#A09590] uppercase mb-2">
-            Gorilla Marketing Guru · AI-Powered · Zero BS
-          </p>
-
           <div className="flex items-center gap-3 mb-4">
             <Image
               src="/logo.png"
@@ -158,10 +154,15 @@ export default function HomePage() {
           <div className="border-t border-[#0D0D0D] mb-4" />
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <p className="text-[#6B5F57] text-sm leading-relaxed max-w-md">
-              Drop photos of your location. Get street-smart, hyper-tactical guerrilla
-              marketing — instantly.
-            </p>
+            <div>
+              <p className="text-xs font-semibold tracking-[0.2em] text-[#A09590] uppercase mb-1">
+                Gorilla Marketing Guru · AI-Powered · Zero BS
+              </p>
+              <p className="text-[#6B5F57] text-sm leading-relaxed max-w-md">
+                Drop photos of your location. Get street-smart, hyper-tactical guerrilla
+                marketing — instantly.
+              </p>
+            </div>
             <div className="flex items-center gap-2 flex-shrink-0">
               {["Hyper-Tactical", "Actionable"].map((tag) => (
                 <span key={tag} className="px-2.5 py-1 text-xs font-bold tracking-widest uppercase bg-[#111111] text-[#F2EDE4] rounded-sm">
