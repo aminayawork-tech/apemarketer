@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
+import VendorFinder from "@/components/VendorFinder";
 
 interface AnalysisResultProps {
   content: string;
@@ -79,6 +80,7 @@ export default function AnalysisResult({
             const isFollowUp = /follow-up/i.test(title);
 
             if (isTop3) {
+              const brief = `Hi, I need help with some marketing materials urgently.\n\nHere's what I'm looking for:\n${body.replace(/[#*]/g, "").trim()}\n\nCould you please provide pricing, turnaround time, and availability? Thank you.`;
               return (
                 <div key={key} className="rounded-lg overflow-hidden border-l-4 border-[#E05C0A] bg-[#111111]">
                   <div className="px-5 pt-4 pb-1">
@@ -86,12 +88,17 @@ export default function AnalysisResult({
                       Top 3 Priority Actions
                     </span>
                   </div>
-                  <div className="px-5 pb-5 text-[#F2EDE4] markdown-content markdown-dark">
+                  <div className="px-5 pb-2 text-[#F2EDE4] markdown-content markdown-dark">
                     <ReactMarkdown>{body}</ReactMarkdown>
                     {isStreaming && i === sections.length - 1 && (
                       <span className="inline-block w-0.5 h-4 bg-[#E05C0A] animate-blink ml-0.5 align-middle" />
                     )}
                   </div>
+                  {!isStreaming && (
+                    <div className="px-5 pb-5">
+                      <VendorFinder brief={brief} />
+                    </div>
+                  )}
                 </div>
               );
             }
