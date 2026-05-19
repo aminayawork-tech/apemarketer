@@ -168,8 +168,12 @@ export default function AnalysisResult({
           <div className="space-y-3">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-7 h-7 rounded bg-[#EAE3D8] flex items-center justify-center flex-shrink-0">
-                <svg className="w-4 h-4 text-[#A09590] animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                <svg className="w-4 h-4 text-[#A09590] animate-pulse" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                  <path d="M4 8 V5 A1 1 0 0 1 5 4 H8" />
+                  <path d="M16 4 H19 A1 1 0 0 1 20 5 V8" />
+                  <path d="M20 16 V19 A1 1 0 0 1 19 20 H16" />
+                  <path d="M8 20 H5 A1 1 0 0 1 4 19 V16" />
+                  <line x1="3.5" y1="12" x2="20.5" y2="12" />
                 </svg>
               </div>
               <div className="space-y-1.5 flex-1">

@@ -3,75 +3,132 @@
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
-const CACHE_KEY = "gmg_stories_v1";
-const SAVED_KEY = "gmg_saved_stories_v1";
+const STORY_PREFIX = "ape_story_v2_";
+const SAVED_KEY = "ape_saved_stories_v2";
 
 interface ParsedStory {
   title: string;
   content: string;
 }
 
+interface DayEntry {
+  date: string;
+  dayName: string;
+  story: ParsedStory | null;
+}
+
 interface SavedStory extends ParsedStory {
   id: string;
   savedAt: string;
-  generatedDate: string;
+  date: string;
+  dayName: string;
 }
 
-function getTodayKey() {
+const DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+function getWeekDates(): { date: string; dayName: string }[] {
+  const today = new Date();
+  const dow = today.getDay(); // 0=Sun
+  const fromMon = dow === 0 ? 6 : dow - 1;
+  const result: { date: string; dayName: string }[] = [];
+  for (let i = 0; i <= fromMon; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - fromMon + i);
+    result.push({ date: d.toISOString().split("T")[0], dayName: DAY_NAMES[i] });
+  }
+  return result;
+}
+
+function getTodayStr() {
   return new Date().toISOString().split("T")[0];
 }
 
-function formatDate(dateStr: string) {
+function parseStory(block: string): ParsedStory {
+  const titleMatch = block.match(/^##\s+(.+)$/m);
+  return {
+    title: titleMatch ? titleMatch[1].trim() : "Story",
+    content: block.trim(),
+  };
+}
+
+function formatShortDate(dateStr: string) {
   return new Date(dateStr + "T12:00:00").toLocaleDateString("en-US", {
-    weekday: "long", month: "long", day: "numeric",
+    month: "short",
+    day: "numeric",
   });
 }
 
-function parseStories(markdown: string): ParsedStory[] {
-  const blocks = markdown.split(/\n---+\n/).map((b) => b.trim()).filter(Boolean);
-  return blocks.map((block) => {
-    const titleMatch = block.match(/^##\s+(.+)$/m);
-    return {
-      title: titleMatch ? titleMatch[1].trim() : "Story",
-      content: block,
-    };
-  });
-}
-
-function StoryCard({
-  story,
+function DayStoryCard({
+  entry,
   onSave,
-  alreadySaved,
+  saved,
+  isStreaming,
 }: {
-  story: ParsedStory;
+  entry: DayEntry;
   onSave: () => void;
-  alreadySaved: boolean;
+  saved: boolean;
+  isStreaming?: boolean;
 }) {
+  const isToday = entry.date === getTodayStr();
+
   return (
     <div className="bg-[#FDFAF6] border border-[#D0C4B8] rounded-lg overflow-hidden">
-      <div className="p-6 sm:p-8 story-content">
-        <ReactMarkdown>{story.content}</ReactMarkdown>
-      </div>
-      <div className="px-6 pb-5 flex justify-end border-t border-[#E0D8CF] pt-4">
-        {alreadySaved ? (
-          <span className="flex items-center gap-1.5 text-xs font-bold text-[#111111] uppercase tracking-wide">
-            <svg className="w-4 h-4 text-[#E05C0A]" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M5 3a2 2 0 00-2 2v16l7-3.5L17 21V5a2 2 0 00-2-2H5z" />
-            </svg>
-            Saved
+      <div className={`px-5 pt-3 pb-3 flex items-center gap-2 border-b ${isToday ? "border-[#E05C0A]/30" : "border-[#EAE3D8]"}`}>
+        <span className={`text-[10px] font-bold tracking-widest uppercase ${isToday ? "text-[#E05C0A]" : "text-[#A09590]"}`}>
+          {entry.dayName}
+        </span>
+        <span className="text-[#D0C4B8] text-[10px]">·</span>
+        <span className="text-[10px] text-[#A09590]">{formatShortDate(entry.date)}</span>
+        {isToday && (
+          <span className="ml-auto text-[9px] font-bold text-[#E05C0A] bg-[#E05C0A]/10 px-1.5 py-0.5 rounded tracking-widest uppercase">
+            Today
           </span>
-        ) : (
-          <button
-            onClick={onSave}
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#111111] border border-[#D0C4B8] rounded hover:bg-[#EAE3D8] hover:border-[#111111] transition-colors uppercase tracking-wide"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-            </svg>
-            Save Story
-          </button>
         )}
       </div>
+
+      {entry.story ? (
+        <>
+          <div className="p-5 sm:p-6 story-content">
+            <ReactMarkdown>{entry.story.content}</ReactMarkdown>
+            {isStreaming && (
+              <span className="inline-block w-0.5 h-4 bg-[#E05C0A] animate-pulse ml-0.5 align-middle" />
+            )}
+          </div>
+          {!isStreaming && (
+            <div className="px-5 pb-4 flex justify-end border-t border-[#E0D8CF] pt-3">
+              {saved ? (
+                <span className="flex items-center gap-1.5 text-xs font-bold text-[#111111] uppercase tracking-wide">
+                  <svg className="w-4 h-4 text-[#E05C0A]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M5 3a2 2 0 00-2 2v16l7-3.5L17 21V5a2 2 0 00-2-2H5z" />
+                  </svg>
+                  Saved
+                </span>
+              ) : (
+                <button
+                  onClick={onSave}
+                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#111111] border border-[#D0C4B8] rounded hover:bg-[#EAE3D8] hover:border-[#111111] transition-colors uppercase tracking-wide"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                  </svg>
+                  Save Story
+                </button>
+              )}
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="p-5 space-y-2">
+          {[90, 75, 85, 60, 80].map((w, i) => (
+            <div
+              key={i}
+              className="h-3 bg-[#EAE3D8] rounded animate-pulse"
+              style={{ width: `${w}%`, animationDelay: `${i * 80}ms` }}
+            />
+          ))}
+          <p className="text-[10px] text-[#A09590] pt-1">Writing...</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -85,7 +142,9 @@ function SavedStoryCard({ story, onDelete }: { story: SavedStory; onDelete: () =
       <div className="p-4 flex items-start gap-3">
         <div className="flex-1 min-w-0">
           <h3 className="font-bold text-[#0D0D0D] text-sm truncate">{story.title}</h3>
-          <p className="text-xs text-[#A09590] mt-0.5">Saved from {formatDate(story.generatedDate)}</p>
+          <p className="text-xs text-[#A09590] mt-0.5">
+            {story.dayName} · {formatShortDate(story.date)}
+          </p>
         </div>
         <div className="flex items-center gap-1 flex-shrink-0">
           {confirmDelete ? (
@@ -121,10 +180,9 @@ function SavedStoryCard({ story, onDelete }: { story: SavedStory; onDelete: () =
 }
 
 export default function Stories() {
-  const [rawContent, setRawContent] = useState("");
-  const [stories, setStories] = useState<ParsedStory[]>([]);
+  const [days, setDays] = useState<DayEntry[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [cachedDate, setCachedDate] = useState<string | null>(null);
+  const [streamingDayIndex, setStreamingDayIndex] = useState<number>(-1);
   const [error, setError] = useState<string | null>(null);
   const [savedStories, setSavedStories] = useState<SavedStory[]>([]);
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
@@ -133,45 +191,45 @@ export default function Stories() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(SAVED_KEY);
-      if (raw) {
-        const parsed: SavedStory[] = JSON.parse(raw);
-        setSavedStories(parsed);
-      }
+      if (raw) setSavedStories(JSON.parse(raw));
     } catch { /* ignore */ }
 
-    try {
-      const cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        const { date, content } = JSON.parse(cached);
-        if (date === getTodayKey()) {
-          setRawContent(content);
-          setStories(parseStories(content));
-          setCachedDate(date);
-          return;
-        }
-      }
-    } catch { /* ignore */ }
+    const weekDates = getWeekDates();
+    const loaded: DayEntry[] = weekDates.map(({ date, dayName }) => {
+      try {
+        const cached = localStorage.getItem(STORY_PREFIX + date);
+        if (cached) return { date, dayName, story: JSON.parse(cached) };
+      } catch { /* ignore */ }
+      return { date, dayName, story: null };
+    });
 
-    generate();
+    setDays(loaded);
+
+    const missing = loaded.filter((d) => !d.story);
+    if (missing.length > 0) {
+      generateStories(missing, loaded);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const ids = new Set(savedStories.map((s) => s.title + s.generatedDate));
-    setSavedIds(ids);
+    setSavedIds(new Set(savedStories.map((s) => `${s.date}_${s.title}`)));
   }, [savedStories]);
 
-  const generate = async () => {
-    setRawContent("");
-    setStories([]);
-    setError(null);
+  const generateStories = async (
+    targets: { date: string; dayName: string }[],
+    currentDays: DayEntry[]
+  ) => {
     setIsGenerating(true);
+    setError(null);
+
+    const dateLabels = targets.map((t) => `${t.dayName} (${t.date})`);
 
     try {
       const response = await fetch("/api/stories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date: new Date().toDateString() }),
+        body: JSON.stringify({ dates: dateLabels }),
       });
 
       if (!response.ok || !response.body) throw new Error("Request failed");
@@ -179,43 +237,81 @@ export default function Stories() {
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let full = "";
+      let completedCount = 0;
+
+      // Track which target we're currently streaming into
+      setStreamingDayIndex(currentDays.findIndex((d) => d.date === targets[0]?.date));
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        full += decoder.decode(value, { stream: true });
-        setRawContent(full);
+        const chunk = decoder.decode(value, { stream: true });
+        full += chunk;
+
+        // Check for completed stories as we stream (look for --- separator)
+        const blocks = full.split(/\n---+\n/);
+        const newlyCompleted = blocks.length - 1; // last block may be incomplete
+
+        if (newlyCompleted > completedCount) {
+          // New stories have completed
+          for (let i = completedCount; i < newlyCompleted && i < targets.length; i++) {
+            const story = parseStory(blocks[i]);
+            const target = targets[i];
+            localStorage.setItem(STORY_PREFIX + target.date, JSON.stringify(story));
+            setDays((prev) =>
+              prev.map((d) => (d.date === target.date ? { ...d, story } : d))
+            );
+          }
+          completedCount = newlyCompleted;
+          // Update streaming indicator to next target
+          if (completedCount < targets.length) {
+            setStreamingDayIndex(
+              currentDays.findIndex((d) => d.date === targets[completedCount]?.date)
+            );
+          }
+        }
       }
 
-      const today = getTodayKey();
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ date: today, content: full }));
-      setCachedDate(today);
-      setStories(parseStories(full));
+      // Handle the last block (no trailing ---)
+      const finalBlocks = full.split(/\n---+\n/).map((b) => b.trim()).filter(Boolean);
+      if (finalBlocks.length > completedCount && completedCount < targets.length) {
+        const story = parseStory(finalBlocks[completedCount]);
+        const target = targets[completedCount];
+        localStorage.setItem(STORY_PREFIX + target.date, JSON.stringify(story));
+        setDays((prev) =>
+          prev.map((d) => (d.date === target.date ? { ...d, story } : d))
+        );
+      }
     } catch {
       setError("Failed to generate stories. Please try again.");
     } finally {
       setIsGenerating(false);
+      setStreamingDayIndex(-1);
     }
   };
 
-  const handleSaveStory = (story: ParsedStory) => {
-    const today = getTodayKey();
+  const handleSave = (entry: DayEntry) => {
+    if (!entry.story) return;
     const newSaved: SavedStory = {
-      ...story,
+      ...entry.story,
       id: Date.now().toString(),
       savedAt: new Date().toISOString(),
-      generatedDate: today,
+      date: entry.date,
+      dayName: entry.dayName,
     };
     const updated = [newSaved, ...savedStories];
     setSavedStories(updated);
     localStorage.setItem(SAVED_KEY, JSON.stringify(updated));
   };
 
-  const handleDeleteSaved = (id: string) => {
+  const handleDelete = (id: string) => {
     const updated = savedStories.filter((s) => s.id !== id);
     setSavedStories(updated);
     localStorage.setItem(SAVED_KEY, JSON.stringify(updated));
   };
+
+  const dayNumber = days.length; // how many days shown this week
+  const totalDots = 7;
 
   return (
     <div className="space-y-5">
@@ -223,40 +319,37 @@ export default function Stories() {
       <div className="bg-[#111111] rounded-lg overflow-hidden">
         <div className="h-1 bg-[#E05C0A]" />
         <div className="p-6">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold tracking-widest uppercase text-[#6B5F57] mb-1">
-                Daily Inspiration
-              </p>
-              <h2
-                className="font-display font-extrabold text-[#F2EDE4] leading-none mb-2"
-                style={{ fontSize: "clamp(1.75rem, 7vw, 2.75rem)", letterSpacing: "-0.02em" }}
-              >
-                APE MARKETER<br />
-                <span className="text-[#E05C0A]">STORIES</span>
-              </h2>
-              <p className="text-[#A09590] text-sm leading-relaxed">
-                Three fresh guerrilla marketing stories every day — save the ones that spark ideas.
-              </p>
-              {cachedDate && !isGenerating && (
-                <p className="text-xs text-[#6B5F57] mt-2 flex items-center gap-1.5">
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  {formatDate(cachedDate)}
-                </p>
-              )}
+          <p className="text-xs font-bold tracking-widest uppercase text-[#6B5F57] mb-1">
+            Daily Inspiration
+          </p>
+          <h2
+            className="font-display font-extrabold text-[#F2EDE4] leading-none mb-3"
+            style={{ fontSize: "clamp(1.75rem, 7vw, 2.75rem)", letterSpacing: "-0.02em" }}
+          >
+            APE MARKETER<br />
+            <span className="text-[#E05C0A]">STORIES</span>
+          </h2>
+
+          {/* Week progress */}
+          <div className="flex items-center gap-3">
+            <div className="flex gap-1">
+              {Array.from({ length: totalDots }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    i < dayNumber
+                      ? i === dayNumber - 1
+                        ? "bg-[#E05C0A]"
+                        : "bg-[#6B5F57]"
+                      : "bg-[#2a2a2a]"
+                  }`}
+                />
+              ))}
             </div>
-            <button
-              onClick={generate}
-              disabled={isGenerating}
-              className="flex-shrink-0 flex items-center gap-2 px-4 py-2 text-xs font-bold text-[#F2EDE4] border border-[#3a3a3a] bg-[#1a1a1a] rounded hover:bg-[#2a2a2a] disabled:opacity-50 disabled:cursor-not-allowed transition-colors uppercase tracking-widest"
-            >
-              <svg className={`w-4 h-4 ${isGenerating ? "animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              {isGenerating ? "Writing..." : "New"}
-            </button>
+            <p className="text-xs text-[#A09590]">
+              Day {dayNumber} of 7
+              <span className="text-[#6B5F57]"> · resets Monday</span>
+            </p>
           </div>
         </div>
       </div>
@@ -270,42 +363,18 @@ export default function Stories() {
         </div>
       )}
 
-      {isGenerating && !rawContent && (
-        <div className="bg-[#FDFAF6] border border-[#D0C4B8] rounded-lg p-6 space-y-4">
-          <div className="space-y-2">
-            <div className="h-5 bg-[#EAE3D8] rounded animate-pulse w-1/2" />
-            <div className="h-3 bg-[#EAE3D8] rounded animate-pulse w-1/3" />
-          </div>
-          <div className="space-y-2 pt-2">
-            {[95, 88, 75, 90, 65, 80, 70].map((w, i) => (
-              <div key={i} className="h-3 bg-[#EAE3D8] rounded animate-pulse" style={{ width: `${w}%`, animationDelay: `${i * 80}ms` }} />
-            ))}
-          </div>
-          <p className="text-xs text-[#A09590] text-center pt-2">Writing today&apos;s stories...</p>
-        </div>
-      )}
+      {/* Daily story cards */}
+      {days.map((entry, i) => (
+        <DayStoryCard
+          key={entry.date}
+          entry={entry}
+          onSave={() => handleSave(entry)}
+          saved={savedIds.has(`${entry.date}_${entry.story?.title ?? ""}`)}
+          isStreaming={isGenerating && i === streamingDayIndex}
+        />
+      ))}
 
-      {isGenerating && rawContent && (
-        <div className="bg-[#FDFAF6] border border-[#D0C4B8] rounded-lg overflow-hidden">
-          <div className="p-6 sm:p-8 story-content">
-            <ReactMarkdown>{rawContent}</ReactMarkdown>
-            <span className="inline-block w-0.5 h-4 bg-[#E05C0A] animate-pulse ml-0.5 align-middle" />
-          </div>
-        </div>
-      )}
-
-      {!isGenerating && stories.length > 0 && stories.map((story, i) => {
-        const saveKey = story.title + (cachedDate ?? "");
-        return (
-          <StoryCard
-            key={i}
-            story={story}
-            onSave={() => handleSaveStory(story)}
-            alreadySaved={savedIds.has(saveKey)}
-          />
-        );
-      })}
-
+      {/* Saved stories */}
       {savedStories.length > 0 && (
         <div className="space-y-3">
           <button
@@ -329,7 +398,7 @@ export default function Stories() {
                 <SavedStoryCard
                   key={story.id}
                   story={story}
-                  onDelete={() => handleDeleteSaved(story.id)}
+                  onDelete={() => handleDelete(story.id)}
                 />
               ))}
             </div>

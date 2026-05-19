@@ -3,27 +3,27 @@ import Anthropic from "@anthropic-ai/sdk";
 
 export async function POST(request: NextRequest) {
   try {
-    const { date } = await request.json().catch(() => ({ date: new Date().toDateString() }));
+    const body = await request.json().catch(() => ({}));
+    const dates: string[] = body.dates ?? [`${new Date().toDateString()}`];
+    const count = dates.length;
 
-    const prompt = `You are a master storyteller specializing in guerrilla marketing success stories, deeply inspired by Jay Conrad Levinson's "Guerrilla Marketing" books.
+    const prompt = `You are a master guerrilla marketing storyteller. Generate exactly ${count} short success ${count === 1 ? "story" : "stories"}, one for each of these days: ${dates.join(" | ")}.
 
-Generate exactly 3 short guerrilla marketing success stories. Today is ${date} — make these stories feel fresh and specific to this moment. Vary the industries, cities, and tactics across the 3 stories.
+Each story should feel specific and fresh. Vary the industries, cities, and tactics across all stories.
 
-Choose 3 different business types (restaurants, food trucks, retail boutiques, gyms, salons, auto shops, coffee shops, bookstores, dental offices, pet shops, hardware stores, real estate agents, service businesses, etc.).
+Format each story exactly like this — separate stories with a line containing only "---":
 
-Format each story exactly like this — do not deviate from this structure:
-
-## [Specific, compelling story title — not generic]
+## [Specific, compelling story title]
 
 **[Business Type]** · [One-line tactic description]
 
-[2-3 paragraphs. Open with the business situation: struggling, new, or facing a specific challenge. Describe the guerrilla idea they came up with. Then detail exactly how they executed it: day of week, money spent, specific locations, what they said or did. Close with concrete measurable results: percentage increases, dollar amounts, new customer counts, press mentions, etc.]
+[2-3 paragraphs. Open with the business situation. Describe the guerrilla idea they came up with. Detail exactly how they executed it: day of week, money spent, specific locations, what they said or did. Close with concrete measurable results: percentage increases, dollar amounts, new customer counts.]
 
 > **The Lesson:** [One clear, immediately actionable takeaway any small business owner could apply this week]
 
 ---
 
-Write with the warm, mentor-over-coffee energy of Levinson himself. Use specific details: real-sounding business names, actual street names, real cities, dollar amounts. Make readers think "I could do that." No emojis. No filler. Just great stories.`;
+Write with warm, mentor-over-coffee energy. Use specific details: real-sounding business names, actual street names, real cities, dollar amounts. Make readers think "I could do that." No emojis. No filler.`;
 
     const client = new Anthropic({
       apiKey: process.env.CLAUDE_API ?? process.env.ANTHROPIC_API_KEY,
