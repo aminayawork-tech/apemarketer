@@ -2,12 +2,14 @@ import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
+    id: "app.apemarketer",
     name: "Ape Marketer",
     short_name: "Ape Marketer",
     description:
       "AI-powered guerrilla marketing analysis for your business location. Get street-smart marketing tactics instantly.",
     start_url: "/",
     display: "standalone",
+    prefer_related_applications: false,
     background_color: "#F2EDE4",
     theme_color: "#111111",
     orientation: "portrait-primary",
