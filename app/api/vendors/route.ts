@@ -3,63 +3,59 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   const { lat, lng } = await request.json();
 
-  const apiKey = process.env.GOOGLE_PLACES_API_KEY;
+  const apiKey = process.env.YELP_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
-      { error: "GOOGLE_PLACES_API_KEY is not configured. Add it to your .env.local file." },
+      { error: "YELP_API_KEY not configured. Get a free key at https://www.yelp.com/developers" },
       { status: 500 }
     );
   }
 
+  const categories = ["printing", "signmaking", "graphicdesign", "bannerads"];
+
   try {
-    // Search for print/sign/marketing vendors nearby
-    const queries = ["print shop", "sign shop vinyl banner"];
-    const seen = new Map<string, object>();
-
-    await Promise.all(
-      queries.map(async (q) => {
-        const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(q)}&location=${lat},${lng}&radius=10000&key=${apiKey}`;
-        const res = await fetch(url);
-        const data = await res.json();
-        for (const p of (data.results ?? []).slice(0, 5)) {
-          if (!seen.has(p.place_id)) {
-            seen.set(p.place_id, {
-              placeId: p.place_id,
-              name: p.name,
-              address: p.formatted_address ?? p.vicinity ?? "",
-              rating: p.rating ?? null,
-              ratingsTotal: p.user_ratings_total ?? 0,
-              lat: p.geometry?.location?.lat,
-              lng: p.geometry?.location?.lng,
-            });
-          }
-        }
-      })
+    const res = await fetch(
+      `https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${lng}&categories=${categories.join(",")}&radius=10000&sort_by=rating&limit=20`,
+      { headers: { Authorization: `Bearer ${apiKey}` } }
     );
 
-    // Fetch phone + website for top 5 results
-    const top = Array.from(seen.values()).slice(0, 5) as Array<Record<string, unknown>>;
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      return NextResponse.json(
+        { error: err.error?.description ?? "Yelp API error" },
+        { status: res.status }
+      );
+    }
 
-    const detailed = await Promise.all(
-      top.map(async (place) => {
-        try {
-          const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.placeId}&fields=formatted_phone_number,website,opening_hours&key=${apiKey}`;
-          const res = await fetch(url);
-          const data = await res.json();
-          const r = data.result ?? {};
-          return {
-            ...place,
-            phone: r.formatted_phone_number ?? null,
-            website: r.website ?? null,
-            openNow: r.opening_hours?.open_now ?? null,
-          };
-        } catch {
-          return place;
-        }
-      })
-    );
+    const data = await res.json();
 
-    return NextResponse.json({ vendors: detailed });
+    const vendors = (data.businesses ?? [])
+      .filter((b: { rating: number }) => b.rating >= 4.5)
+      .slice(0, 6)
+      .map((b: {
+        name: string;
+        rating: number;
+        review_count: number;
+        location: { display_address: string[] };
+        display_phone: string;
+        phone: string;
+        url: string;
+        is_closed: boolean;
+        distance: number;
+        image_url: string;
+      }) => ({
+        name: b.name,
+        rating: b.rating,
+        reviewCount: b.review_count,
+        address: b.location.display_address.join(", "),
+        phone: b.display_phone,
+        phoneRaw: b.phone,
+        url: b.url,
+        isOpen: !b.is_closed,
+        distance: Math.round(b.distance * 0.000621371 * 10) / 10, // meters → miles
+      }));
+
+    return NextResponse.json({ vendors });
   } catch (err) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : "Failed to fetch vendors" },
