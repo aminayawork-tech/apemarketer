@@ -7,12 +7,31 @@ interface AnalysisResultProps {
   content: string;
   isStreaming: boolean;
   error?: string | null;
+  onQuestionClick?: (question: string) => void;
+}
+
+function parseSections(markdown: string) {
+  const parts = markdown.split(/^## /m);
+  return parts.filter(Boolean).map((part) => {
+    const nl = part.indexOf("\n");
+    const title = nl >= 0 ? part.slice(0, nl).trim() : part.trim();
+    const body = nl >= 0 ? part.slice(nl + 1).trim() : "";
+    return { title, body };
+  });
+}
+
+function extractQuestions(body: string): string[] {
+  return body
+    .split("\n")
+    .map((l) => l.replace(/^[-*]\s+/, "").replace(/^\d+\.\s+/, "").trim())
+    .filter((l) => l.endsWith("?") && l.length > 8);
 }
 
 export default function AnalysisResult({
   content,
   isStreaming,
   error,
+  onQuestionClick,
 }: AnalysisResultProps) {
   if (error) {
     return (
@@ -33,12 +52,12 @@ export default function AnalysisResult({
 
   if (!content && !isStreaming) return null;
 
+  const sections = parseSections(content);
+
   return (
     <div className="space-y-4 animate-fadeIn">
       <div className="flex items-center justify-between">
-        <h2 className="text-xs font-bold tracking-widest uppercase text-[#A09590]">
-          Analysis
-        </h2>
+        <h2 className="text-xs font-bold tracking-widest uppercase text-[#A09590]">Analysis</h2>
         {isStreaming && (
           <div className="flex items-center gap-2 text-[#E05C0A] text-xs">
             <Image src="/logo.png" alt="" width={18} height={18} className="animate-pulse" />
@@ -52,17 +71,93 @@ export default function AnalysisResult({
         )}
       </div>
 
-      <div className="relative rounded-lg border border-[#D0C4B8] bg-[#FDFAF6] p-6 overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#E05C0A]" />
+      {content ? (
+        <div className="space-y-4">
+          {sections.map(({ title, body }, i) => {
+            const key = `${title}-${i}`;
+            const isTop3 = /top 3 priority/i.test(title);
+            const isFollowUp = /follow-up/i.test(title);
 
-        {content ? (
-          <div className="markdown-content">
-            <ReactMarkdown>{content}</ReactMarkdown>
-            {isStreaming && (
-              <span className="inline-block w-0.5 h-4 bg-[#E05C0A] animate-blink ml-0.5 align-middle" />
-            )}
-          </div>
-        ) : (
+            if (isTop3) {
+              return (
+                <div key={key} className="rounded-lg overflow-hidden border-l-4 border-[#E05C0A] bg-[#111111]">
+                  <div className="px-5 pt-4 pb-1">
+                    <span className="text-xs font-bold tracking-widest uppercase text-[#E05C0A]">
+                      Top 3 Priority Actions
+                    </span>
+                  </div>
+                  <div className="px-5 pb-5 text-[#F2EDE4] markdown-content markdown-dark">
+                    <ReactMarkdown>{body}</ReactMarkdown>
+                    {isStreaming && i === sections.length - 1 && (
+                      <span className="inline-block w-0.5 h-4 bg-[#E05C0A] animate-blink ml-0.5 align-middle" />
+                    )}
+                  </div>
+                </div>
+              );
+            }
+
+            if (isFollowUp) {
+              const questions = extractQuestions(body);
+              const hasQuestions = questions.length > 0;
+              return (
+                <div key={key} className="relative rounded-lg border border-[#D0C4B8] bg-[#FDFAF6] p-5 overflow-hidden">
+                  <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#E05C0A]" />
+                  <p className="text-xs font-bold tracking-widest uppercase text-[#E05C0A] mb-3">Follow-up Questions</p>
+                  {hasQuestions ? (
+                    <div className="space-y-2">
+                      {questions.map((q, qi) => (
+                        <button
+                          key={qi}
+                          onClick={() => onQuestionClick?.(q)}
+                          className="w-full text-left px-4 py-3 rounded-lg border border-[#D0C4B8] bg-white text-[#0D0D0D] text-sm leading-snug hover:border-[#E05C0A] hover:bg-[#FFF8F4] active:scale-[0.99] transition-all duration-150 flex items-start gap-3 group"
+                        >
+                          <span className="text-[#E05C0A] font-bold mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform">↗</span>
+                          <span>{q}</span>
+                        </button>
+                      ))}
+                      <p className="text-[10px] text-[#A09590] pt-1 text-center">Tap a question to send it to Ask the Ape</p>
+                    </div>
+                  ) : (
+                    <div className="markdown-content">
+                      <ReactMarkdown>{body}</ReactMarkdown>
+                    </div>
+                  )}
+                  {isStreaming && i === sections.length - 1 && (
+                    <span className="inline-block w-0.5 h-4 bg-[#E05C0A] animate-blink ml-0.5 align-middle" />
+                  )}
+                </div>
+              );
+            }
+
+            // Default section
+            return (
+              <div key={key} className="relative rounded-lg border border-[#D0C4B8] bg-[#FDFAF6] p-6 overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#E05C0A]" />
+                <p className="text-xs font-bold tracking-widest uppercase text-[#E05C0A] mb-3">{title}</p>
+                <div className="markdown-content">
+                  <ReactMarkdown>{body}</ReactMarkdown>
+                  {isStreaming && i === sections.length - 1 && (
+                    <span className="inline-block w-0.5 h-4 bg-[#E05C0A] animate-blink ml-0.5 align-middle" />
+                  )}
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Fallback: show raw content while streaming before first ## appears */}
+          {sections.length === 0 && (
+            <div className="relative rounded-lg border border-[#D0C4B8] bg-[#FDFAF6] p-6 overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#E05C0A]" />
+              <div className="markdown-content">
+                <ReactMarkdown>{content}</ReactMarkdown>
+                {isStreaming && <span className="inline-block w-0.5 h-4 bg-[#E05C0A] animate-blink ml-0.5 align-middle" />}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="relative rounded-lg border border-[#D0C4B8] bg-[#FDFAF6] p-6 overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#E05C0A]" />
           <div className="space-y-3">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-7 h-7 rounded bg-[#EAE3D8] flex items-center justify-center flex-shrink-0">
@@ -76,15 +171,11 @@ export default function AnalysisResult({
               </div>
             </div>
             {[80, 60, 90, 70, 50].map((width, i) => (
-              <div
-                key={i}
-                className="h-3 bg-[#EAE3D8] rounded animate-pulse"
-                style={{ width: `${width}%`, animationDelay: `${i * 100}ms` }}
-              />
+              <div key={i} className="h-3 bg-[#EAE3D8] rounded animate-pulse" style={{ width: `${width}%`, animationDelay: `${i * 100}ms` }} />
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {!isStreaming && content && (
         <p className="text-center text-[#A09590] text-xs">

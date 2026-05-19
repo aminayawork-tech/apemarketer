@@ -93,6 +93,16 @@ body {
   margin: 1.5rem 0;
 }
 
+/* ── Dark card (Top 3 Priority Actions) ── */
+.markdown-dark p { color: #F2EDE4; line-height: 1.75; margin-bottom: 0.75rem; }
+.markdown-dark ol { padding-left: 1.5rem; margin-bottom: 0.75rem; }
+.markdown-dark ul { padding-left: 1.5rem; margin-bottom: 0.75rem; }
+.markdown-dark li { color: #F2EDE4; line-height: 1.65; margin-bottom: 0.6rem; }
+.markdown-dark ul li::marker { color: #E05C0A; }
+.markdown-dark ol li::marker { color: #E05C0A; font-weight: 700; }
+.markdown-dark strong { color: #ffffff; font-weight: 700; }
+.markdown-dark em { color: #A09590; font-style: italic; }
+
 /* ── Stories reading view ── */
 .story-content h2 {
   font-size: 1.3rem;

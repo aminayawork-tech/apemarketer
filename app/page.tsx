@@ -35,6 +35,7 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
   const [isSaved, setIsSaved] = useState(false);
   const [savedAnalyses, setSavedAnalyses] = useState<SavedAnalysis[]>([]);
+  const [chatSeed, setChatSeed] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     try {
@@ -219,7 +220,7 @@ export default function HomePage() {
 
             {hasContent && (
               <div className="mt-6 space-y-4">
-                <AnalysisResult content={analysisContent} isStreaming={isStreaming} error={error} />
+                <AnalysisResult content={analysisContent} isStreaming={isStreaming} error={error} onQuestionClick={(q) => { setChatSeed(q + "__" + Date.now()); }} />
 
                 {canSave && (
                   <div className="flex justify-end">
@@ -247,7 +248,7 @@ export default function HomePage() {
                 )}
 
                 {!isStreaming && analysisContent && !error && (
-                  <Chat initialAnalysis={analysisContent} context={context} />
+                  <Chat initialAnalysis={analysisContent} context={context} seedInput={chatSeed} />
                 )}
               </div>
             )}

@@ -11,6 +11,7 @@ interface Message {
 
 interface ChatProps {
   initialAnalysis: string;
+  seedInput?: string;
   context: {
     businessType: string;
     targetCustomers: string;
@@ -20,7 +21,7 @@ interface ChatProps {
   };
 }
 
-export default function Chat({ initialAnalysis, context }: ChatProps) {
+export default function Chat({ initialAnalysis, context, seedInput }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
@@ -28,12 +29,23 @@ export default function Chat({ initialAnalysis, context }: ChatProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const lastSeed = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     if (!isMinimized) {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isMinimized]);
+
+  useEffect(() => {
+    if (seedInput && seedInput !== lastSeed.current) {
+      lastSeed.current = seedInput;
+      const question = seedInput.replace(/__\d+$/, "");
+      setInput(question);
+      setIsMinimized(false);
+      setTimeout(() => textareaRef.current?.focus(), 50);
+    }
+  }, [seedInput]);
 
   const handleSend = async () => {
     if (!input.trim() || isStreaming) return;
