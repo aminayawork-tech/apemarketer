@@ -54,7 +54,9 @@ export default function Chat({ initialAnalysis, context, seedInput }: ChatProps)
     const newMessages = [...messages, userMessage];
     setMessages([...newMessages, { role: "assistant", content: "" }]);
     setInput("");
-    if (textareaRef.current) textareaRef.current.style.height = "auto";
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "40px";
+    }
     setIsStreaming(true);
 
     try {
@@ -199,18 +201,18 @@ export default function Chat({ initialAnalysis, context, seedInput }: ChatProps)
             <textarea
               ref={textareaRef}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              onInput={(e) => {
-                const t = e.currentTarget;
+              onChange={(e) => {
+                setInput(e.target.value);
+                const t = e.target;
                 t.style.height = "auto";
-                t.style.height = `${Math.min(t.scrollHeight, 120)}px`;
+                t.style.height = `${Math.min(t.scrollHeight, 220)}px`;
               }}
+              onKeyDown={handleKeyDown}
               placeholder="Ask about a tactic, request specifics..."
               rows={1}
               disabled={isStreaming}
-              className="flex-1 resize-none bg-[#F2EDE4] border border-[#D0C4B8] rounded px-3 py-2.5 text-sm text-[#0D0D0D] placeholder-[#A09590] focus:outline-none focus:border-[#111111] focus:ring-1 focus:ring-[#111111]/20 disabled:opacity-50"
-              style={{ minHeight: "40px" }}
+              className="flex-1 resize-none bg-[#F2EDE4] border border-[#D0C4B8] rounded px-3 py-2.5 text-sm text-[#0D0D0D] placeholder-[#A09590] focus:outline-none focus:border-[#111111] focus:ring-1 focus:ring-[#111111]/20 disabled:opacity-50 overflow-y-auto"
+              style={{ minHeight: "40px", maxHeight: "220px" }}
             />
             <button
               onClick={handleSend}
