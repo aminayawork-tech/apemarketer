@@ -232,7 +232,11 @@ export default function Stories() {
         body: JSON.stringify({ dates: dateLabels }),
       });
 
-      if (!response.ok || !response.body) throw new Error("Request failed");
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error ?? `API error ${response.status}`);
+      }
+      if (!response.body) throw new Error("No response body");
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
