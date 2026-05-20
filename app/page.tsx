@@ -272,7 +272,7 @@ export default function HomePage() {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`flex-1 flex flex-col items-center justify-center gap-1 py-3 transition-colors duration-150 ${
-              activeTab === tab ? "text-[#E05C0A]" : "text-[#6B5F57] hover:text-[#A09590]"
+              activeTab === tab ? "text-[#E05C0A]" : "text-[#f2ede4] sm:text-[#6B5F57] hover:text-[#A09590]"
             }`}
           >
             {tab === "analyze" && (
