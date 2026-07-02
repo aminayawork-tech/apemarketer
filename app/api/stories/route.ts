@@ -31,7 +31,7 @@ Write with warm, mentor-over-coffee energy. Use specific details: real-sounding 
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const stream = (client.messages as any).stream({
-      model: "claude-opus-4-7",
+      model: "claude-opus-4-8",
       max_tokens: 8192,
       messages: [{ role: "user", content: prompt }],
     });

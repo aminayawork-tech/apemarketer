@@ -153,7 +153,7 @@ export default function HomePage() {
             </h1>
 
             {/* Hamburger menu */}
-            <div className="relative flex-shrink-0">
+            <div className="flex-shrink-0">
               <button
                 onClick={() => setMenuOpen((o) => !o)}
                 className="flex flex-col justify-center items-center gap-[5px] w-9 h-9 rounded hover:bg-[#E0D8CF] transition-colors"
@@ -163,65 +163,54 @@ export default function HomePage() {
                 <span className="block w-5 h-[2px] bg-[#0D0D0D]" />
                 <span className="block w-5 h-[2px] bg-[#0D0D0D]" />
               </button>
-
-              {menuOpen && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-                  <div className="absolute right-0 top-10 z-50 w-52 bg-[#111111] rounded shadow-lg overflow-hidden">
-                    {(["analyze", "saved", "stories"] as const).map((tab) => (
-                      <button
-                        key={tab}
-                        onClick={() => { setActiveTab(tab); setMenuOpen(false); }}
-                        className={`w-full text-left px-4 py-3 text-xs font-bold tracking-widest uppercase flex items-center justify-between transition-colors ${
-                          activeTab === tab ? "text-[#E05C0A]" : "text-[#F2EDE4] hover:bg-[#2a2a2a]"
-                        }`}
-                      >
-                        {tab === "analyze" && "Analyze"}
-                        {tab === "stories" && "Stories"}
-                        {tab === "saved" && (
-                          <span className="flex items-center gap-2">
-                            Saved
-                            {savedAnalyses.length > 0 && (
-                              <span className="bg-[#E05C0A] text-white text-[9px] px-1 py-0.5 rounded-sm font-bold leading-none">
-                                {savedAnalyses.length}
-                              </span>
-                            )}
-                          </span>
-                        )}
-                        {activeTab === tab && <span className="w-1.5 h-1.5 rounded-full bg-[#E05C0A]" />}
-                      </button>
-                    ))}
-
-                    <div className="border-t border-[#2a2a2a]" />
-
-                    <button
-                      onClick={() => {
-                        if (navigator.share) {
-                          navigator.share({ title: "Ape Marketer", text: "AI-powered guerrilla marketing for your business location.", url: "https://www.apemarketer.app" });
-                        } else {
-                          navigator.clipboard.writeText("https://www.apemarketer.app");
-                        }
-                        setMenuOpen(false);
-                      }}
-                      className="w-full text-left px-4 py-3 text-xs font-bold tracking-widest uppercase text-[#F2EDE4] hover:bg-[#2a2a2a] transition-colors flex items-center gap-2"
-                    >
-                      <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                      </svg>
-                      Share Ape Marketer
-                    </button>
-
-                    <a
-                      href="/privacy"
-                      onClick={() => setMenuOpen(false)}
-                      className="w-full block px-4 py-3 text-xs font-bold tracking-widest uppercase text-[#A09590] hover:bg-[#2a2a2a] hover:text-[#F2EDE4] transition-colors"
-                    >
-                      Privacy Policy
-                    </a>
-                  </div>
-                </>
-              )}
             </div>
+
+            {/* Bottom sheet menu */}
+            {menuOpen && (
+              <>
+                <div className="fixed inset-0 z-40 bg-black/50" onClick={() => setMenuOpen(false)} />
+                <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#1a1a1a] rounded-t-2xl overflow-hidden">
+                  <div className="flex items-center justify-between px-6 py-4 border-b border-[#2a2a2a]">
+                    <span className="text-xs font-bold tracking-widest uppercase text-[#A09590]">Menu</span>
+                    <button onClick={() => setMenuOpen(false)} className="text-[#A09590] hover:text-[#F2EDE4] transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      if (navigator.share) {
+                        navigator.share({ title: "Ape Marketer", text: "AI-powered guerrilla marketing for your business location.", url: "https://www.apemarketer.app" });
+                      } else {
+                        navigator.clipboard.writeText("https://www.apemarketer.app");
+                      }
+                      setMenuOpen(false);
+                    }}
+                    className="w-full flex items-center gap-4 px-6 py-5 bg-[#222222] hover:bg-[#2a2a2a] transition-colors text-left"
+                  >
+                    <svg className="w-5 h-5 text-[#E05C0A] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                    <span className="text-[#F2EDE4] font-semibold text-base">Share Ape Marketer</span>
+                  </button>
+
+                  <a
+                    href="/privacy"
+                    onClick={() => setMenuOpen(false)}
+                    className="w-full flex items-center gap-4 px-6 py-5 bg-[#222222] hover:bg-[#2a2a2a] transition-colors border-t border-[#2a2a2a]"
+                  >
+                    <svg className="w-5 h-5 text-[#E05C0A] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span className="text-[#F2EDE4] font-semibold text-base">Privacy Policy</span>
+                  </a>
+
+                  <div className="pb-8" />
+                </div>
+              </>
+            )}
           </div>
 
           <div className="border-t border-[#0D0D0D] mb-4" />
