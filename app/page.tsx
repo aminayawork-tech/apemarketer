@@ -117,7 +117,7 @@ export default function LandingPage() {
             },
           ].map((f) => (
             <div key={f.step} className="bg-[#FDFAF6] border border-[#D0C4B8] rounded-lg p-6">
-              <span className="font-display font-extrabold text-5xl text-[#E05C0A] opacity-30 leading-none block mb-4">{f.step}</span>
+              <span className="inline-flex items-center justify-center w-10 h-10 bg-[#111111] text-[#F2EDE4] font-display font-extrabold text-lg rounded mb-4">{f.step}</span>
               <h3 className="font-display font-extrabold text-2xl mb-3">{f.title}</h3>
               <p className="text-[#6B5F57] text-sm leading-relaxed">{f.desc}</p>
             </div>
@@ -162,7 +162,7 @@ export default function LandingPage() {
       <footer className="border-t border-[#D0C4B8] px-6 md:px-12 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Image src="/logo.png" alt="Ape Marketer" width={24} height={24} />
-          <span className="font-display font-extrabold text-sm text-[#A09590]">APE MARKETER</span>
+          <span className="font-display font-extrabold text-sm text-[#A09590]">APE <span className="text-[#E05C0A]">MARKETER</span></span>
         </div>
         <div className="flex items-center gap-6 text-xs text-[#A09590]">
           <Link href="/privacy" className="hover:text-[#0D0D0D] transition-colors">Privacy Policy</Link>
