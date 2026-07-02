@@ -90,10 +90,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Divider */}
       <div className="border-t border-[#1f1f1f]" />
 
-      {/* Features */}
+      {/* How It Works */}
       <section className="px-6 md:px-12 py-20 max-w-6xl mx-auto">
         <p className="text-[10px] font-bold tracking-widest uppercase text-[#A09590] mb-12 text-center">How It Works</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -123,10 +122,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Divider */}
       <div className="border-t border-[#1f1f1f]" />
 
-      {/* Tags row */}
+      {/* Tags */}
       <section className="px-6 md:px-12 py-10 max-w-6xl mx-auto flex flex-wrap gap-3 justify-center">
         {["Guerrilla Marketing", "Zero Ad Spend", "Local Business", "Foot Traffic", "Street-Level Tactics", "AI Analysis", "Instant Results"].map((t) => (
           <span key={t} className="px-3 py-1.5 text-xs font-bold tracking-widest uppercase border border-[#2a2a2a] text-[#A09590] rounded-sm">
@@ -135,10 +133,9 @@ export default function LandingPage() {
         ))}
       </section>
 
-      {/* Divider */}
       <div className="border-t border-[#1f1f1f]" />
 
-      {/* CTA banner */}
+      {/* CTA */}
       <section className="px-6 md:px-12 py-20 max-w-6xl mx-auto text-center">
         <h2
           className="font-display font-extrabold leading-none mb-6"
