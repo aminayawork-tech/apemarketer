@@ -1,4 +1,4 @@
-const CACHE = "ape-marketer-v1";
+const CACHE = "ape-marketer-v2";
 const OFFLINE_ASSETS = ["/", "/icons/icon-192.png", "/icons/icon-512.png", "/logo.png"];
 
 self.addEventListener("install", (e) => {

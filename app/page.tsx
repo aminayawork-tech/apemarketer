@@ -36,6 +36,7 @@ export default function HomePage() {
   const [isSaved, setIsSaved] = useState(false);
   const [savedAnalyses, setSavedAnalyses] = useState<SavedAnalysis[]>([]);
   const [chatSeed, setChatSeed] = useState<string | undefined>(undefined);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -145,11 +146,55 @@ export default function HomePage() {
               className="flex-shrink-0"
             />
             <h1
-              className="font-display font-extrabold text-[#0D0D0D] leading-none"
+              className="font-display font-extrabold text-[#0D0D0D] leading-none flex-1"
               style={{ fontSize: "clamp(2.5rem, 10vw, 5rem)", letterSpacing: "-0.02em" }}
             >
               APE <span className="text-[#E05C0A]">MARKETER</span>
             </h1>
+
+            {/* Hamburger menu */}
+            <div className="relative flex-shrink-0">
+              <button
+                onClick={() => setMenuOpen((o) => !o)}
+                className="flex flex-col justify-center items-center gap-[5px] w-9 h-9 rounded hover:bg-[#E0D8CF] transition-colors"
+                aria-label="Menu"
+              >
+                <span className="block w-5 h-[2px] bg-[#0D0D0D]" />
+                <span className="block w-5 h-[2px] bg-[#0D0D0D]" />
+                <span className="block w-5 h-[2px] bg-[#0D0D0D]" />
+              </button>
+
+              {menuOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
+                  <div className="absolute right-0 top-10 z-50 w-44 bg-[#111111] rounded shadow-lg overflow-hidden">
+                    {(["analyze", "saved", "stories"] as const).map((tab) => (
+                      <button
+                        key={tab}
+                        onClick={() => { setActiveTab(tab); setMenuOpen(false); }}
+                        className={`w-full text-left px-4 py-3 text-xs font-bold tracking-widest uppercase flex items-center justify-between transition-colors ${
+                          activeTab === tab ? "text-[#E05C0A]" : "text-[#F2EDE4] hover:bg-[#2a2a2a]"
+                        }`}
+                      >
+                        {tab === "analyze" && "Analyze"}
+                        {tab === "stories" && "Stories"}
+                        {tab === "saved" && (
+                          <span className="flex items-center gap-2">
+                            Saved
+                            {savedAnalyses.length > 0 && (
+                              <span className="bg-[#E05C0A] text-white text-[9px] px-1 py-0.5 rounded-sm font-bold leading-none">
+                                {savedAnalyses.length}
+                              </span>
+                            )}
+                          </span>
+                        )}
+                        {activeTab === tab && <span className="w-1.5 h-1.5 rounded-full bg-[#E05C0A]" />}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
 
           <div className="border-t border-[#0D0D0D] mb-4" />
