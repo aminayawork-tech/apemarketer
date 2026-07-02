@@ -167,7 +167,7 @@ export default function HomePage() {
               {menuOpen && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-                  <div className="absolute right-0 top-10 z-50 w-44 bg-[#111111] rounded shadow-lg overflow-hidden">
+                  <div className="absolute right-0 top-10 z-50 w-52 bg-[#111111] rounded shadow-lg overflow-hidden">
                     {(["analyze", "saved", "stories"] as const).map((tab) => (
                       <button
                         key={tab}
@@ -191,6 +191,33 @@ export default function HomePage() {
                         {activeTab === tab && <span className="w-1.5 h-1.5 rounded-full bg-[#E05C0A]" />}
                       </button>
                     ))}
+
+                    <div className="border-t border-[#2a2a2a]" />
+
+                    <button
+                      onClick={() => {
+                        if (navigator.share) {
+                          navigator.share({ title: "Ape Marketer", text: "AI-powered guerrilla marketing for your business location.", url: "https://www.apemarketer.app" });
+                        } else {
+                          navigator.clipboard.writeText("https://www.apemarketer.app");
+                        }
+                        setMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-3 text-xs font-bold tracking-widest uppercase text-[#F2EDE4] hover:bg-[#2a2a2a] transition-colors flex items-center gap-2"
+                    >
+                      <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                      </svg>
+                      Share Ape Marketer
+                    </button>
+
+                    <a
+                      href="/privacy"
+                      onClick={() => setMenuOpen(false)}
+                      className="w-full block px-4 py-3 text-xs font-bold tracking-widest uppercase text-[#A09590] hover:bg-[#2a2a2a] hover:text-[#F2EDE4] transition-colors"
+                    >
+                      Privacy Policy
+                    </a>
                   </div>
                 </>
               )}
