@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import UploadZone from "@/components/UploadZone";
 import ContextForm from "@/components/ContextForm";
@@ -151,6 +152,15 @@ export default function HomePage() {
             >
               APE <span className="text-[#E05C0A]">MARKETER</span>
             </h1>
+
+            <UserButton
+              appearance={{
+                elements: {
+                  avatarBox: "w-8 h-8",
+                  userButtonPopoverCard: "border border-[#D0C4B8]",
+                },
+              }}
+            />
 
             {/* Hamburger menu */}
             <div className="flex-shrink-0">
