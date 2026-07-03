@@ -116,10 +116,10 @@ export default function LandingPage() {
               desc: "Receive a full guerrilla marketing playbook — specific, actionable, zero fluff. Instantly.",
             },
           ].map((f) => (
-            <div key={f.step} className="bg-[#FDFAF6] border border-[#D0C4B8] rounded-lg p-6">
-              <span className="inline-flex items-center justify-center w-10 h-10 bg-[#111111] text-[#F2EDE4] font-display font-extrabold text-lg rounded mb-4">{f.step}</span>
-              <h3 className="font-display font-extrabold text-2xl mb-3">{f.title}</h3>
-              <p className="text-[#6B5F57] text-sm leading-relaxed">{f.desc}</p>
+            <div key={f.step} className="bg-[#111111] rounded-lg p-6">
+              <span className="font-display font-extrabold text-5xl text-[#E05C0A] opacity-40 leading-none block mb-4">{f.step}</span>
+              <h3 className="font-display font-extrabold text-2xl text-[#F2EDE4] mb-3">{f.title}</h3>
+              <p className="text-[#A09590] text-sm leading-relaxed">{f.desc}</p>
             </div>
           ))}
         </div>
