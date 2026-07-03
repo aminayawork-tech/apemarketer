@@ -117,7 +117,7 @@ export default function LandingPage() {
             },
           ].map((f) => (
             <div key={f.step} className="bg-[#111111] rounded-lg p-6">
-              <span className="font-display font-extrabold text-5xl text-[#E05C0A] opacity-40 leading-none block mb-4">{f.step}</span>
+              <span className="font-display font-extrabold text-5xl text-[#E05C0A] leading-none block mb-4">{f.step}</span>
               <h3 className="font-display font-extrabold text-2xl text-[#F2EDE4] mb-3">{f.title}</h3>
               <p className="text-[#A09590] text-sm leading-relaxed">{f.desc}</p>
             </div>
