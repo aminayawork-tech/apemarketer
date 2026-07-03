@@ -162,7 +162,7 @@ export default function LandingPage() {
       <footer className="border-t border-[#D0C4B8] px-6 md:px-12 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Image src="/logo.png" alt="Ape Marketer" width={24} height={24} />
-          <span className="font-display font-extrabold text-sm text-[#A09590]">APE <span className="text-[#E05C0A]">MARKETER</span></span>
+          <span className="font-display font-extrabold text-sm text-[#0D0D0D]">APE <span className="text-[#E05C0A]">MARKETER</span></span>
         </div>
         <div className="flex items-center gap-6 text-xs text-[#A09590]">
           <Link href="/privacy" className="hover:text-[#0D0D0D] transition-colors">Privacy Policy</Link>
