@@ -52,32 +52,40 @@ export const metadata: Metadata = {
   },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ClerkProvider = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  ? (require("@clerk/nextjs").ClerkProvider as React.ComponentType<{ children: React.ReactNode }>)
+  : ({ children }: { children: React.ReactNode }) => <>{children}</>;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={barlowCondensed.variable}>
-      <head>
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-touch-fullscreen" content="yes" />
-        <link rel="apple-touch-startup-image" href="/icons/icon-1024.png" />
-      </head>
-      <body className="min-h-screen bg-[#F2EDE4] text-[#0D0D0D] antialiased">
-        {children}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js');
-                });
-              }
-            `,
-          }}
-        />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className={barlowCondensed.variable}>
+        <head>
+          <meta name="mobile-web-app-capable" content="yes" />
+          <meta name="apple-touch-fullscreen" content="yes" />
+          <link rel="apple-touch-startup-image" href="/icons/icon-1024.png" />
+        </head>
+        <body className="min-h-screen bg-[#F2EDE4] text-[#0D0D0D] antialiased">
+          {children}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                if ('serviceWorker' in navigator) {
+                  window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js');
+                  });
+                }
+              `,
+            }}
+          />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
