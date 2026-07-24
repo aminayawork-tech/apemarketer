@@ -7,7 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "Ape Marketer",
     description:
       "AI-powered guerrilla marketing analysis for your business location. Get street-smart marketing tactics instantly.",
-    start_url: "/",
+    start_url: "/app",
+    scope: "/",
     display: "standalone",
     prefer_related_applications: false,
     background_color: "#F2EDE4",
