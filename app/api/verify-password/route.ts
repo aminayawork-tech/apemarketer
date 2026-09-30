@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Incorrect password" }, { status: 401 });
   }
 
-  const redirectTo = req.nextUrl.searchParams.get("redirect") || "/";
+  const redirectTo = req.nextUrl.searchParams.get("redirect") || "/app";
 
   const res = NextResponse.json({ redirect: redirectTo });
   res.cookies.set("site-auth", "1", {
