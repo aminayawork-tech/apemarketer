@@ -155,14 +155,16 @@ export default function HomePage() {
               APE <span className="text-[#E05C0A]">MARKETER</span>
             </h1>
 
-            <UserButton
-              appearance={{
-                elements: {
-                  avatarBox: "w-8 h-8",
-                  userButtonPopoverCard: "border border-[#D0C4B8]",
-                },
-              }}
-            />
+            {process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && (
+              <UserButton
+                appearance={{
+                  elements: {
+                    avatarBox: "w-8 h-8",
+                    userButtonPopoverCard: "border border-[#D0C4B8]",
+                  },
+                }}
+              />
+            )}
 
             {/* Hamburger menu */}
             <div className="flex-shrink-0">
