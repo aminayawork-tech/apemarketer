@@ -1,6 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const PUBLIC_PATHS = [
+  "/enter-password",
+  "/api/verify-password",
+  "/_next",
+  "/favicon.ico",
+  "/logo.png",
+  "/icons",
+  "/sw.js",
+  "/manifest",
+  "/.well-known",
+];
+
 export default async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+
+  // Allow public paths through without password check
+  const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
+
+  if (!isPublic && process.env.SITE_PASSWORD) {
+    const cookie = req.cookies.get("site-auth");
+    if (!cookie || cookie.value !== "1") {
+      const url = req.nextUrl.clone();
+      url.pathname = "/enter-password";
+      url.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(url);
+    }
+  }
+
   if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
     return NextResponse.next();
   }
